@@ -1,0 +1,129 @@
+\documentclass{mwrep}
+
+% Polskie znaki
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{indentfirst}
+
+% Strona tytułowa
+\usepackage{pgfplots}
+\usepackage{siunitx}
+\usepackage{paracol}
+
+% Pływające obrazki
+\usepackage{float}
+\usepackage{svg}
+\usepackage{graphicx}
+
+% table of contents refs
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{booktabs}
+\usepackage{listings}
+
+
+
+\SendSettingsToPgf
+\title{\bf System biurowych zakładów wzajemnych \vskip 0.1cm}
+\author{Robert Wojtaś \and Jakub Sikora}
+\date{\today}
+\pgfplotsset{compat=1.15}	
+\begin{document}
+
+\makeatletter
+\renewcommand{\maketitle}{\begin{titlepage}
+		\begin{center}{
+				\LARGE {\bf Politechnika Warszawska}}\\
+			\vspace{0.4cm}
+			{\LARGE {\bf Wydział Elektroniki i Technik Informacyjnych}}\\
+			\vspace{5cm}
+			{\bf \LARGE \mbox{Wprowadzenie do Baz Danych - Projekt} \vskip 0.1cm}
+		\end{center}
+		\vspace{0.1cm}
+
+		\begin{center}
+			{\bf \LARGE \@title}
+		\end{center}
+
+		\vspace{10cm}
+		\begin{paracol}{2}
+			\addtocontents{toc}{\protect\setcounter{tocdepth}{1}}
+			\subsection*{Zdający:}
+			\bf{ \Large{ \noindent\@author \par}}
+			\addtocontents{toc}{\protect\setcounter{tocdepth}{2}}
+
+			\switchcolumn \addtocontents{toc}{\protect\setcounter{tocdepth}{1}}
+			\subsection*{Prowadzący:}
+			\bf{\Large{\noindent \mbox{dr inż. Marcin Kowalczyk}}}
+			\addtocontents{toc}{\protect\setcounter{tocdepth}{2}}
+
+		\end{paracol}
+		\vspace*{\stretch{6}}
+		\begin{center}
+			\bf{\large{Warszawa, \@date\vskip 0.1cm}}
+		\end{center}
+	\end{titlepage}
+}
+\makeatother
+\maketitle
+
+\tableofcontents
+
+\chapter{Zakres i cel projektu}
+
+
+\chapter{Definicja systemu}
+
+\section{Perspektywy użytkowników}
+
+
+\chapter{Model konceptualny}
+
+\section{Definicja zbiorów encji określonych w projekcie}
+
+\section{Ustalenie związków i ich typów między encjami}
+
+\section{Określenie atrybutów i ich dziedzin}
+
+\section{Dodatkowe reguły integralnościowe}
+
+\section{Klucze kandydujące i główne}
+
+\section{Schemat ER na poziomie konceptualnym}
+
+\section{Problem pułapek szczelinowych i wachlarzowych – analiza i przykłady}
+
+
+
+\chapter{Model logiczny}
+
+\section{Charakterystyka modelu relacyjnego}
+
+\section{Usunięcie właściwości niekompatybilnych z modelem relacyjnym}
+
+\section{Proces normalizacji}
+
+\subsection{Pierwsza postać normalna}
+\subsection{Drugaa postać normalna}
+\subsection{Trzecia postać normalna}
+
+
+\section{Schemat ER na poziomie modelu logicznego}
+
+\section{Więzy integralności}
+
+\section{Proces denormalizacji}
+
+\chapter{Faza fizyczna}
+
+\section{Projekt transakcji i weryfikacja ich wykonalności}
+
+\section{Strojenie bazy danych – dobór indeksów}
+
+\section{Skrypt SQL zakładający bazę danych}
+
+\section{Przykłady zapytań i poleceń SQL odnoszących się do bazy danych}
+
+\end{document}

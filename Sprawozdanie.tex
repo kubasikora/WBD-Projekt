@@ -1,4 +1,4 @@
-\documentclass{mwrep}
+\documentclass{mwrep}[15pt]
 
 % Polskie znaki
 \usepackage{polski}
@@ -22,6 +22,7 @@
 \usepackage{cleveref}
 \usepackage{booktabs}
 \usepackage{listings}
+
 
 
 
@@ -72,11 +73,83 @@
 \tableofcontents
 
 \chapter{Zakres i cel projektu}
+Realizowany projekt dotyczy biurowego systemu obstawiania meczów
+na dużych turniejach sportowych. System ten zajmuje się zbieraniem 
+zakładów od swoich użytkowników oraz prowadzeniem statystyk. 
+Oferuje swoim użytkownikom możliwość zakładania się na wyniki spotkań
+grane w ramach uprzednio zdefiniowanych turniejów oraz podliczaniem 
+wyników wedle ustalonego algorytmu punktowania.
+\\ 
+\\
+\indent W tym celu, system prowadzi bazę danych która zbiera informacje o spotkaniach
+oraz dostępnych turniejach. Każdy uczestnik gry próbuje przewidzieć dokładny wynik 
+spotkania i w zależności od poprawności, otrzymuje $3$, $1$ albo $0$ punktów.
+Trzy punkty gracz otrzymuje, gdy padnie dokładnie obstawiony przez niego wynik.
+Gracz otrzymuje jeden punkt, gdy końcowy rezultat jest taki sam jak obstawiony z dokładnością
+do zdobytych przez drużynę punktów. Przykładowo, gracz obstawił że meczu piłki
+nożnej zakończy się rezultatem $3$:$1$ a mecz zakończył się wynikiem $4$:$2$. 
+Gdy gracz nie trafi w rezultat, nie otrzymuje punktów.  
+\\
+\\
+\indent W celu ułatwienia graczom podejmowanie decyzji, system oferuje szeroką gamę statystyk 
+prowadzonych w ramach turniejów. Baza przechowuje informacje o nadchodzących spotkaniach 
+pomiędzy dwoma drużynami, o zawodnikach występujących w tych drużynach, o sędziach 
+przewidzianych do prowadzania danego spotkania a także o planowanym miejscu rozegrania spotkania.  
+\\
+\\
+\indent Każdy użytkownik może grać niezależnie w kilku różnych turniejach i dodawać zakłady 
+na dowolną ilość spotkań z takim zastrzeżeniem, że nie wolno dodać zakładu na 
+rozpoczęte już spotkania. Dodatkowo, każdy turniej oferuje specjalne zakłady długoterminowe
+dotyczące ostatecznego zwycięzcy i najbardziej wartościowego zawodnika turnieju. Zakłady 
+te są warte odpowiednio więcej punktów. Po zakończeniu wszystkich spotkań z danego turnieju, wybierany 
+jest zwycięzca na podstawie zdobytej liczby punktów. 
 
 
 \chapter{Definicja systemu}
 
 \section{Perspektywy użytkowników}
+W ramach systemu zdefiniowaliśmy trzy typy potencjalnych użytkowników: \\
+\begin{enumerate}
+    \item Użytkownik - uczestnik gry, dodaje zakłady nierozpoczęte jeszcze spotkania w
+    ramach turniejów na które się wcześniej zapisał\\ 
+
+    \item Statystyk - moderator gry, dodaje informacje o drużynach, sędziach, stadionach i trenerach
+    oraz na bieżąco uzupełnia wyniki spotkań i turniejów \\ 
+
+    \item Administrator - główny moderator systemu, tworzy konta użytkownikom oraz przywraca dostępy \\
+    
+\end{enumerate}
+
+\section{Zdefiniowane transakcje}
+Do zdefiniowania transakcji posłużyliśmy się metodyką User Stories znanych z metodyki Agile. Wcieliśmy się 
+w rolę każdego z użytkowników i opisaliśmy potrzebne funkcjonalności według znanego schematu:
+
+\begin{center}
+    \emph{Jako} osoba ..., \\ \emph{potrzebuję/chcę} takiej funkcjonalności ...,\\  \emph{ponieważ} pozwoli mi to ...  
+\end{center}
+
+Na podstawie tak opisanych funkcjonalności, w łatwy sposób mogliśmy zdefiniować transakcje w systemie.
+
+\subsection{Użytkownik systemu}
+
+\subsubsection{Zapis na turniej}
+\emph{Jako użytkownik, potrzebuję mieć możliwość zapisania się na turniej, ponieważ wtedy będę mógł wziąć udział w grze.}
+
+\subsubsection{Dodawanie zakładu na spotkanie}
+\emph{Jako użytkownik, potrzebuję móc dodawać nowe zakłady na spotkania które jeszcze się nie rozpoczęły, ponieważ pozwoli mi to na zdobywanie punktów.}
+
+\subsubsection{Edycja zakładu na spotkanie}
+\emph{Jako użytkownik, potrzebuję móc edytować swoje zakłady na spotkania które jeszcze się nie rozpoczęły, ponieważ pozwoli mi to na zmianę zdania i poprawienie swojego zakładu.}
+
+\subsubsection{Dodawanie zakładu długoterminowego}
+\emph{Jako użytkownik, potrzebuję móc dodawać zakład długoterminowy na zwycięzce turnieju na który się zapisałem a który jeszcze się nie rozpoczął, ponieważ dzięki temu będę mógł zdobyć więcej punktów.}
+
+\subsubsection{Edycja zakładu długoterminowego}
+\emph{Jako użytkownik, potrzebuję móc edytować zakład długoterminowego na zwycięzce turnieju na który się zapisałem a który jeszcze się nie rozpoczął, ponieważ pozwoli mi to na zmianę zdania i poprawienie swojego zakładu.}
+
+\subsection{Statystyk}
+\subsubsection{Dodawanie turniejów}
+\emph{Jako statystyk, potrzebuję możliwości dodawania turniejów, ponieważ wtedy użytkownicy będą mogli się na nie zapisywać.}
 
 
 \chapter{Model konceptualny}

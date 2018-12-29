@@ -1,4 +1,4 @@
-\documentclass{mwrep}[15pt]
+\documentclass{mwrep}
 
 % Polskie znaki
 \usepackage{polski}
@@ -551,7 +551,6 @@ w postaci liczbowego identyfikatora.
 \end{threeparttable}
 \vspace{1cm}
 
-\section{Schemat ER na poziomie konceptualnym}
 \newpage
 
 \section{Problem pułapek szczelinowych i wachlarzowych – analiza i przykłady}
@@ -593,6 +592,7 @@ W przedstawionym projekcie, po wnikliwej analizie stwierdziliśmy brak sensownyc
 takie połączenia spełniające wymagania pułapki szczelinowej ale z punktu biznesowego takie połączenia nie mają sensu, dlatego też 
 zostają one świadomie pominięte.	
 
+\section{Schemat ER na poziomie konceptualnym}
 
 \chapter{Model logiczny}
 
@@ -643,20 +643,122 @@ atrybuty \emph{DataZawarcia} i \emph{DataZakończenia}. Pozwala to na przechowyw
 (z zachowaniem chronologii) oraz informacji o tym który kontrakt jest aktualnie ważny (jest to ten bez 
 daty zakończenia).
 
+\subsection{Liczby mnogie}
+W związku z inną konwencją nazewniczą, zmieniliśmy nazwy relacji tak aby ich nazwy były w liczbie mnogiej.
 
-\newpage
+\begin{threeparttable}[H]
+	\begin{tabular}{|p{0.5\linewidth}|p{0.43\linewidth}|}
+	\hline
+	Stara nazwa & Nowa nazwa \\ \hline
+	Użytkownik & Użytkownicy \\ \hline
+	Mecz & Mecze \\ \hline
+	Zakład & Zakłady \\ \hline
+	Wynik & Wyniki \\ \hline
+	ZakładDługoterminowy & ZakładyDługoterminowe \\ \hline
+	Turniej & Turnieje \\ \hline
+	Drużyna & Drużyny \\ \hline
+	Stadion & Stadiony \\ \hline
+	Trener & Trenerzy \\ \hline
+	Sędzia & Sędziowie \\ \hline
+	Zawodnik & Zawodnicy \\ \hline
+	ZapisUżytkownika & ZapisyUżytkowników \\ \hline
+	ZapisDrużyny & ZapisyDrużyn \\ \hline
+	KontraktZawodnika & KontraktyZawodników \\ \hline
+	KontraktTrenerski & KontraktyTrenerskie \\ \hline
+	\end{tabular}	
+	\caption{Zrealizowana zmiana nazw relacji}
+\end{threeparttable}
+\vspace{0.5cm}
+
+
 \section{Proces normalizacji}
+Normalizacja bazy polega na eliminacji powtarzających się (redundantych) wpisów. W bazie 
+znormalizowanej, dane nie są w żaden sposób powtarzane a tylko i wyłącznie ze sobą linkowane. 
+Zwiększa to bezpieczeństwo i zmniejsza ryzyko powstania niespójności. \\
+\\
+\indent Normalizacja polega tylko i wyłącznie na przekształcaniu schematu bazy danych. Rezultatem
+procesu normalizacji nigdy nie jest utrata danych, ewentualnie ich przyrost poprzez dodanie nowych
+kluczy\cite{Kowalczyk1}.
 
 \subsection{Pierwsza postać normalna}
+Przytoczmy definicję pierwszej postaci normalnej: \\
+\\
+\emph{Relacja jest w pierwszej postaci normalnej, jeśli każda wartość atrybutu
+w każdej krotce tej relacji jest wartością elementarną, czyli
+nierozkładalną oraz jeśli nie ma powtarzających się grup\cite{Kowalczyk1}.}\\
+
+W myśl tej definicji, zlokalizowaliśmy dwie relację które na pierwszy rzut oka mogą nie spełniać 
+warunków pierwszej postaci normalnej. 
+
+\subsubsection{Relacja \emph{Stadiony}}
+Atrybut \emph{Adres} relacji \emph{Stadiony} nie jest polem atomowym. Adres składa się z kilku elementów, takich jak
+miasto, ulica, numer ulicy i kod pocztowy. W celu doprowadzenia relacji do 1PN, atrybut ten został rozbity na 4 wcześniej
+wymienione.
+
+\subsubsection{Relacja \emph{Wyniki}}
+Relacja \emph{Wyniki} potencjalnie może przechowywać duże grupy bardzo podobnych rekordów, różniących się 
+stemplem czasowym. Zdecydowaliśmy się na wprowadzenie dodatkowej relacji \emph{SłownikWyników}, która przechowuje powtarzające się
+wyniki.
+
 \subsection{Druga postać normalna}
+Przypomnijmy definicję drugiej postaci normalnej: \\
+\\
+\emph{Relacja jest w drugiej postaci normalnej, jeśli jest w 1PN oraz każdy
+atrybut tej relacji nie wchodzący w skład żadnego klucza potencjalnego
+jest w pełni funkcyjnie zależny od wszystkich kluczy potencjalnych
+tej relacji.\cite{Kowalczyk1}.}\\
+
+Z definicji tej można wyciągnąć wniosek że jeżeli relacja jest w pierwszej postaci normalnej i ma wszystkie 
+klucze potencjalne proste to jest automatycznie w drugiej postaci normalnej.\\
+\\
+We wszystkich (oprócz jednej) relacjach zastosowany jest prosty klucz potencjalny, co automatycznie załatwią sprawę spełniania 2PN.
+
+\subsubsection{Relacja \emph{Użytkownicy}}
+Jedyną podejrzaną relacją jest relacja przechowująca dane o użytkownikach. Aby zachować spójność dla developera aplikacji, zdecydowaliśmy się 
+we wcześniejszym kroku na wstawienie sztucznego identyfikatora, pomimo unikalnego loginu każdego użytkownika. Nie ma jednak 
+tutaj mowy o żadnych zależnościach funkcyjnych między pozostałymi atrybutami krotki.
+
 \subsection{Trzecia postać normalna}
+Trzecia postać normalna ma następującą definicję:\\
+\\
+\emph{Relacja jest w trzeciej postaci normalnej, jeśli jest ona w drugiej
+postaci normalnej i każdy jej atrybut nie wchodzący w skład żadnego
+klucza potencjalnego nie jest przechodnio funkcyjnie zależny
+od żadnego klucza potencjalnego tej relacji.\cite{Kowalczyk1}.}\\
 
+Z definicji bezpośrednio wynika że wszystkie niekluczowe kolumny zależą tylko od całości klucza. Ponownie, jak w przypadku rozważań 
+na temat drugiej postaci normalnej, mamy tylko jedną relację podejrzaną o niespełnianie definicji 3PN.
 
-\section{Schemat ER na poziomie modelu logicznego}
-
-\section{Więzy integralności}
+\subsubsection{Relacja \emph{Użytkownicy} ponownie...}
+Wcielmy się w rolę hipotetycznego użytkownika aplikacji opartej na projektowanej bazie danych. Do logowania się 
+do systemu podaje ona tylko i wyłącznie swój login. Na jego podstawie znajdowany jest hash hasła oraz zabezpieczający
+ciąg zaburzający i porównywany z dostarczonym hasłem. W całej tej historii ani razu nie został użyty sztuczny identyfikator. 
+Odpowiednia atrybuty krotki zostały zlokalizowane za pomocą niepełnego klucza. W związku z tym, aby spełnić postulaty 3PN, pozbyliśmy się
+sztucznego identyfikatora \emph{UżytkownikId} z relacji \emph{Użytkownicy}, w wyniku czego prostym kluczem głównym stał się atrybut \emph{Login}.
 
 \section{Proces denormalizacji}
+Denormalizacja jest procesem jawnego odejścia od założonej postaci normalnej, celem optymalizacji pracy z bazą.
+W ramach tego procesu, częściowo cofnęliśmy część zmian wprowadzonych przy normalizacji bazy.
+
+\subsubsection{Relacja \emph{Użytkownicy} po raz trzeci...}
+W ramach zachowania spójności z resztą relacji, przywróciliśmy klucz główny \emph{UżytkownikId} tak aby programista aplikacji 
+nie musiał zagłębiać się w rozbudowaną dokumentację prezentowanej bazy danych. Atrybut \emph{Login} został cofnięty do swojej pierwotnej roli,
+wymuszona na nim została unikalność, jednak do definiowania związków między relacjami przekazywany będzie numeryczny identyfikator.
+
+\subsubsection{Relacja \emph{Stadiony} (ponownie?)}
+Przechowywanie całego adresu pocztowego stadionu wydaje się dość bezsensownym pomysłem, biorąc pod uwagę przeznaczenie bazy. 
+Najważniejszym z całego adresu jest nazwa ulicy, od której najczęściej pochodzi nazwa lub chociaż przydomek stadionu (przykładowo każdy fan 
+Liverpool'u wie że ich stadion znajduje się przy Anfield Road, jednak mało który zna kod pocztowy tego miejsca). W związku z tym, zdecydowaliśmy
+się na pozostawienie atrybutu \emph{Miasto} oraz złączenie pozostałych atrybutów adresowych w jeden \emph{Adres}, który nie będzie przechowywał
+informacji pocztowych a jedynie te pozwalające na wizualną identyfikację położenia stadionu.
+
+\subsubsection{Relacja \emph{Wyniki}}
+Wyodrębnienie relacji \emph{SłownikWyników} na pierwszy rzut oka wydaje się doskonałym pomysłem, jednak dodaje dodatkowy narzut obliczeniowy
+na silnik bazy danych. Duplikacja wyniku spotkania (dwóch liczb!) nie wydaje się taką niedogodnością jaką jest znacznie dłuższy czas dostępu do danych, dlatego też 
+zdecydowaliśmy się na wycofanie się z wprowadzonych zmian i powrót do pierwotnej wersji gdzie pola \emph{WynikGospodarzy} oraz \emph{WynikGości}
+nie są wyodrębnione do osobnej encji tylko są atrybutami encji \emph{Wynik}.
+
+\section{Schemat ER na poziomie modelu logicznego}
 
 \chapter{Faza fizyczna}
 
@@ -688,6 +790,13 @@ daty zakończenia).
 	  Commun. ACM,
 	  New York,
 	  1970.
+
+	\bibitem{UNDA}
+	  Worldwide Narrow Vision Gang,
+	  \emph{Rewers}.
+	  UNDA Records,
+	  Gdynia,
+	  2018.
 	
 	\end{thebibliography}
 

@@ -22,6 +22,7 @@
 \usepackage{cleveref}
 \usepackage{booktabs}
 \usepackage{listings}
+\usepackage{threeparttable}
 
 
 \SendSettingsToPgf
@@ -83,7 +84,7 @@ Realizowany projekt dotyczy biurowego systemu obstawiania meczów
 na dużych turniejach sportowych. System ten zajmuje się zbieraniem 
 zakładów od swoich użytkowników oraz prowadzeniem statystyk. 
 Oferuje swoim użytkownikom możliwość zakładania się na wyniki spotkań
-grane w ramach uprzednio zdefiniowanych turniejów oraz podliczaniem 
+rozgrywanych w ramach uprzednio zdefiniowanych turniejów oraz podliczaniem 
 wyników wedle ustalonego algorytmu punktowania.
 \\ 
 \\
@@ -205,6 +206,123 @@ dane tak naprawdę chcemy przechowywać w projektowanej bazie oraz pozwala na us
 związków między danymi.
 
 \section{Definicja zbiorów encji określonych w projekcie}
+Wymagany zbiór encji najłatwiej uzyskać poprzez wyodrębnienie rzeczowników z opisu projektu.
+Na podstawie analizy założeń projektowych założyliśmy następujący zbiór encji:
+
+\begin{itemize}
+	\item Użytkownik
+	\item Mecz
+	\item Zakład
+	\item Wynik
+	\item Zakład długoterminowy
+	\item Turniej
+	\item Drużyna
+	\item Stadion
+	\item Trener
+	\item Sędzia
+\end{itemize}
+ 
+\vspace{1cm}
+\section{Ustalenie związków i ich typów między encjami}
+
+\begin{threeparttable}[H]
+	\begin{tabular}{|p{0.15\linewidth}|p{0.15\linewidth}|p{0.05\linewidth}|p{0.17\linewidth}|p{0.17\linewidth}|p{0.1\linewidth}|}
+	\hline
+	\multicolumn{2}{|p{0.3\linewidth}|}{Relacje biorące udział} & Typ & \multicolumn{2}{p{0.3\linewidth}|}{Obowiązkowość} & Stopień         \\ \hline
+	Użytkownik & Zakład & 1:n & Obowiązkowy & Opcjonalny & binarny  \\ \hline
+	Użytkownik & ZakładD\tnote{1} & 1:n & Obowiązkowy & Opcjonalny & binarny  \\ \hline
+	Użytkownik & Turniej & n:m & Opcjonalny & Opcjonalny & binarny  \\ \hline
+	Mecz & Zakład & 1:n & Obowiązkowy & Opcjonalny & binarny  \\ \hline
+	Turniej & ZakładD\tnote{1} & 1:n & Obowiązkowy & Opcjonalny & binarny  \\ \hline
+	Turniej & Mecz & 1:n & Obowiązkowy & Opcjonalny & binarny  \\ \hline
+	Sędzia & Mecz & 1:n & Obowiązkowy & Opcjonalny & binarny  \\ \hline
+	Stadion & Mecz & 1:n & Obowiązkowy & Opcjonalny & binarny  \\ \hline
+	Wynik & Mecz & 1:1 & Opcjonalny & Obowiązkowy & binarny  \\ \hline
+	Drużyna & ZakładD\tnote{1} & 1:1 & Obowiązkowy & Obowiązkowy & binarny \\ \hline
+	Drużyna & Mecz & 2:n & Obowiązkowy & Opcjonalny & binarny  \\ \hline
+	Turniej & Drużyna & n:m & Opcjonalny & Opcjonalny & binarny \\ \hline 
+	Turniej & Drużyna & 1:n & Opcjonalny & Opcjonalny & binarny \\ \hline 
+	Zawodnik & Drużyna & n:m & Obowiązkowy & Opcjonalny & binarny  \\ \hline
+	Trener & Drużyna & n:m & Opcjonalny & Obowiązkowy & binarny  \\ \hline
+	\end{tabular}
+	\begin{tablenotes}
+		\item [1] skrót od ZakładDługoterminowy
+	\end{tablenotes}	
+	\caption{Tabela typów związków}
+\end{threeparttable}
+
+\subsubsection{Użytkownik - Zakład}
+Związek użytkownika z zakładem odwzorowuje następującą zależność. Użytkownik stawia zakład. Każdy zakład ma swojego jednego właściciela którym jest dany użytkownik, natomiast jeden użytkownik może stawiać od zera do wielu zakładów.
+
+\subsubsection{Użytkownik - ZakładDługoterminowy}
+Związek użytkownika z zakładem długoterminowym jest przedstawieniem w systemie zdarzenia postawienia przez użytkownika zakładu długoterminowego. Użytkownik tworzy zakład długoterminowy,w ogólności może ich tworzyć wiele (może też nie stworzyć żadnego). Każdy zakład długoterminowy ma obowiązkowo swojego jedynego właściciela.
+
+\subsubsection{Użytkownik - Turniej}
+Związek pomiędzy użytkownikiem a turniejem symbolizuje zapis użytkownika na turniej. Na jeden turniej może być zapisanych od zera do wielu użytkowników. Każdy użytkownik może zapisać się od zera do wielu turniejów.
+
+\subsubsection{Mecz - Zakład} 
+Kolejny związek jest reprezentacją fizycznego połączenia meczu i zakładu. Jeden zakład przewiduje wynik
+tylko jednego meczu. Na jeden mecz może być postawionych kilka zakładów, w szczególności zero.
+
+\subsubsection{Turniej - ZakładDługoterminowy}
+Każdy zakład długoterminowy przewiduje wynik dokładnie jednego turnieju. Na jeden turniej może zostać
+postawionych od zera do wielu zakładów długoterminowych.
+
+\subsubsection{Turniej - Mecz}
+W ramach jednego turnieju rozgrywane jest od zera (sytuacja raczej dziwna, jednak możliwa zanim statystyk doda do turnieju drużyny oraz spotkania) do wielu
+spotkań. Jeden mecz jest rozgrywany w ramach jednego turnieju, przy czym zgodnie z założeniem wykluczamy możliwość
+obstawiania spotkań towarzyskich czyli takich które nie są rozgrywane w ramach żadnego turnieju.
+
+\subsubsection{Sędzia - Mecz}
+Reprezentuje sędziowanie meczu przez sędziego. Jeden sędzia może sędziować wiele spotkań (oczywiście nie równocześnie), natomiast 
+jedno spotkanie ma tylko jednego sędziego głównego.
+
+\subsubsection{Stadion - Mecz}
+Podobnie jak w poprzednim związku, jeden mecz jest rozgrywany na jednym stadionie. Jeden stadion może być gospodarzem
+wielu spotkań.
+
+\subsubsection{Wynik - Mecz}
+Każdy mecz kończy się jakimś wynikiem. Zdecydowaliśmy się na rozwiązanie w którym wynik meczu jest przechowywany w osobnej encji.
+Jest to związek 1:1, jeden wynik obowiązkowo odpowiada jednemu spotkaniu. Warto zwrócić uwagę na opcjonalność związku ze strony encji meczu.
+Mecz który się jeszcze nie zakończył, nie może posiadać wyniku (system nie przewiduje obstawiania ustawionych spotkań).
+
+\subsubsection{Drużyna - Zakład Długoterminowy}
+Reprezentuje przewidywany wynik zakładu długoterminowego. Jeden zakład długoterminowy przewiduje jednego zwycięzce danego turnieju. 
+Dana drużyna może wielokrotnie zostać wybrana przez użytkownika jako potencjalny zwycięzca, choć wcale nie musi być wybrana kiedykolwiek.
+
+\subsubsection{Drużyna - Mecz}
+Związek reprezentuje uczestnictwo drużyn w meczu. Każdy mecz musi mieć swoich uczestników. Zgodnie z założeniem, system pozwala na 
+obstawianie spotkań pomiędzy dwoma drużynami, nie będą obsługiwane dyscyplinu typu skoki narciarskie gdzie liczba uczestników jest różna od dwóch.
+Jedna drużyna może grać wiele spotkań, w szczególności żadnego.
+
+
+\subsubsection{Turniej- Drużyna }
+W ramach jednego turnieju, gra w nim tylko określony zbiór drużyn. Zgodnie z założeniem, drużyny mogą być dynamicznie dodawane 
+do turnieju dlatego też zakładamy że turniej może mieć zero uczestniczących drużyn. Z drugiej strony, jedna drużyna może brać udział 
+w wielu turniejach czy chociażby w różnych edycjach tych samych rozgrywek.
+
+
+\subsubsection{Turniej - Drużyna \emph{ponownie...}}
+Turnieje i drużyny łączy jeszcze jeden związek, który zdecydowaliśmy się specjalnie wyróżnić. Drugi związek pomiędzy turniejem a drużyną, reprezentuje zwycięzcę turnieju. W przypadku zwycięzców turniejów, 
+zdecydowaliśmy się na przedstawienie tego nie za pomocą kolejnej encji (tak jak w przypadku encji \emph{Wynik}), tylko 
+przy pomocy związku. Jeden turniej ma jednego zwycięzce, który zostaje poznany po jego zakończeniu. Jedna drużyna może wygrywać kilka turniejów,
+w szczególności nie musi wygrać jakiegokolwiek.
+
+
+\subsubsection{Zawodnik - Drużyna}
+Jedna drużyna w danym momencie może mieć zakontraktowanych wielu zawodników oraz dodatkowo mieć historię zakończonych kontraktów z 
+jeszcze większą ilością sportowców. Z drugiej strony, jeden zawodnik w swojej karierze może być związany
+kontraktem z wieloma drużynami. 
+
+
+\subsubsection{Trener - Drużyna}
+Podobnie jak w przypadku poprzedniego punktu, związek \emph{Trener - Drużyna} reprezentuje kontrakty trenerów z drużynami.
+Jedna drużyna ma (zazwyczaj) jednego głównego trenera, jednak ma przeszłość z innymi szkoleniowcami. Z drugiej strony, jeden szkoleniowiec
+może w swoim życiu być związany z kilkoma (rekordziści nawet z kilkunastoma) drużynami. 
+
+\newpage
+
+\section{Określenie atrybutów i ich dziedzin}
 \vspace{1.5cm}
 \subsubsection{Użytkownik}
 \begin{table}[H]
@@ -220,7 +338,6 @@ związków między danymi.
 	\end{tabular}
 	\caption{Atrybuty encji Użytkownik}
 \end{table}
-\newpage
 
 \subsubsection{Mecz}
 \begin{table}[H]
@@ -233,7 +350,7 @@ związków między danymi.
 	\caption{Atrybuty encji Mecz}
 \end{table}
 
-\vspace{1cm}
+\newpage
 
 \subsubsection{Zakład}
 \begin{table}[H]
@@ -263,7 +380,7 @@ związków między danymi.
 	\caption{Atrybuty encji Wynik}
 \end{table}
 
-\newpage
+\vspace{1cm}
 
 \subsubsection{Zakład Długoterminowy}
 \begin{table}[H]
@@ -276,7 +393,7 @@ związków między danymi.
 	\caption{Atrybuty encji Zakład Długoterminowy}
 \end{table}
 
-\vspace{1cm}
+\newpage
 
 \subsubsection{Turniej}
 \begin{table}[H]
@@ -305,7 +422,7 @@ związków między danymi.
 	\caption{Atrybuty encji Drużyna}
 \end{table}
 
-\newpage
+\vspace{1cm}
 
 \subsubsection{Stadion}
 \begin{table}[H]
@@ -320,6 +437,8 @@ związków między danymi.
 	\end{tabular}
 	\caption{Atrybuty encji Stadion}
 \end{table}
+
+\newpage
 
 \subsubsection{Trener}
 \begin{table}[H]
@@ -350,15 +469,15 @@ związków między danymi.
 	\end{tabular}
 	\caption{Atrybuty encji Sędzia}
 \end{table}
-\newpage
-
-\section{Ustalenie związków i ich typów między encjami}
-
-\section{Określenie atrybutów i ich dziedzin}
 
 \section{Dodatkowe reguły integralnościowe}
 
+Należy zapewnić aby w systemie nie doszło do sytuacji że zwycięzcą danego turnieju jest drużyna która nie jest jego uczestnikiem.
+Zgodnie podjęliśmy decyzję projektową że to zabezpieczenie zostanie zrealizowane po stronie aplikacji a nie po stronie bazy danych.
+
 \section{Klucze kandydujące i główne}
+
+
 
 \section{Schemat ER na poziomie konceptualnym}
 
@@ -397,11 +516,20 @@ związków między danymi.
 
 \begin{thebibliography}{9}
 
+	
+
 	\bibitem{Wrembel1}
 	  Robert Wrembel,
-	  \emph{Wykład z przedmiotu Bazy Danych: Modelowanie danych, Model związków-encji}.,
+	  \emph{Wykład z przedmiotu Bazy Danych. Wykład 3: Modelowanie danych, Model związków-encji}.,
 	  Poznań,
 	  2006.
+
+	
+	\bibitem{Kowalczyk1}
+	  Marcin Kowalczyk,
+	  \emph{Wykład z przedmiotu Wprowadzanie do Baz Danych}.,
+	  Warszawa,
+	  20018.
 	
 	\end{thebibliography}
 

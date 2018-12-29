@@ -488,10 +488,13 @@ może w swoim życiu być związany z kilkoma (rekordziści nawet z kilkunastoma
 
 \section{Dodatkowe reguły integralnościowe}
 
+Na poziomie konceptualnym, wszystkie atrybuty zostały oznaczone jako \texttt{NOT NULL}. Dodatkowo, atrybut \emph{Login} w encji
+\emph{Użytkownik} musi być unikalny względem reszty danych w bazie, dlatego też został on opatrzony słowem \texttt{UNIQUE}.
+
 Należy zapewnić aby w systemie nie doszło do sytuacji że zwycięzcą danego turnieju jest drużyna która nie jest jego uczestnikiem.
 Zgodnie podjęliśmy decyzję projektową że to zabezpieczenie zostanie zrealizowane po stronie aplikacji a nie po stronie bazy danych.
 
-\vspace{2cm}
+\vspace{1cm}
 \section{Klucze kandydujące i główne}
 
 Dla każdej encji spróbowaliśmy znaleźć unikalny klucz. Wyniki naszych starań znajdują się w
@@ -503,16 +506,16 @@ tabeli poniżej.
 	\hline
 	Relacja & Klucz kandydujący \\ \hline
 	Użytkownik & Login \\ \hline
-	Mecz &  --- \\ \hline
+	Mecz &  \hfil--- \\ \hline
 	Drużyna &  Nazwa \\ \hline
 	Zawodnik &  Imię \& Nazwisko \\ \hline
 	Stadion &  Adres \& Nazwa \\ \hline
-	Zakład &  --- \\ \hline
-	Wynik &  --- \\ \hline
+	Zakład &  \hfil--- \\ \hline
+	Wynik &  \hfil--- \\ \hline
 	Turniej &  Nazwa \\ \hline
 	Sędzia & Imię \& Nazwisko \\ \hline
 	Trener & Imię \& Nazwisko \\ \hline
-	ZakładDługoterminowy &  --- \\ \hline
+	ZakładDługoterminowy &  \hfil--- \\ \hline
 	\end{tabular}	
 	\caption{Proponowane klucze kandydujące}
 \end{threeparttable}
@@ -533,16 +536,16 @@ w postaci liczbowego identyfikatora.
 	\hline
 	Relacja & Klucz główny & Klucz kandydujący \\ \hline
 	Użytkownik & UżytkownikId & Login \\ \hline
-	Mecz & MeczId & --- \\ \hline
-	Drużyna & DrużynaId & --- \\ \hline
-	Zawodnik & ZawodnikId & --- \\ \hline
-	Stadion & StadionId & --- \\ \hline
-	Zakład & ZakładId & --- \\ \hline
-	Wynik & WynikId & --- \\ \hline
-	Turniej & TurniejId & --- \\ \hline
-	Sędzia & SędziaId & --- \\ \hline
-	Trener & TrenerId & --- \\ \hline
-	ZakładDługoterminowy & ZakładDługoterminowyId & --- \\ \hline
+	Mecz & MeczId & \hfil--- \\ \hline
+	Drużyna & DrużynaId & \hfil--- \\ \hline
+	Zawodnik & ZawodnikId & \hfil--- \\ \hline
+	Stadion & StadionId & \hfil--- \\ \hline
+	Zakład & ZakładId & \hfil--- \\ \hline
+	Wynik & WynikId & \hfil--- \\ \hline
+	Turniej & TurniejId & \hfil--- \\ \hline
+	Sędzia & SędziaId & \hfil--- \\ \hline
+	Trener & TrenerId & \hfil--- \\ \hline
+	ZakładDługoterminowy & ZakładDługoterminowyId & \hfil--- \\ \hline
 	\end{tabular}	
 	\caption{Klucze główne i pozostałe kandydujące}
 \end{threeparttable}
@@ -552,15 +555,96 @@ w postaci liczbowego identyfikatora.
 \newpage
 
 \section{Problem pułapek szczelinowych i wachlarzowych – analiza i przykłady}
+Przed przejściem do kolejnego etapu projektowania, należało rozważyć czy w naszym projekcie
+nie ukryły się żadne pułapki szczelinowe oraz wachlarzowe. 
 
+
+\subsection{Pułapki wachlarzowe}
+Pułapką wachlarzową nazywamy sytuację w której nie ma jednoznacznego połączenia pomiędzy dwoma encjami które 
+są w związku n:$1$ z tą samą encją. Najłatwiej ją zidentyfikować gdy z jednej encji wychodzi więcej niż jeden związek $1$:n.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.4]{./wachlarz.png}
+	\caption{Przykład pułapki wachlarzowej przedstawionej na wykładzie\cite{Kowalczyk1}}
+\end{figure}
+
+Na przykładzie przedstawionym powyżej, nie jest możliwe jednoznaczne wywnioskowanie w którym wydziale pracuje dany pracownik, mimo iż znamy 
+do której należy jednostki. \\
+\\
+\indent W początkowym projekcie systemu, do schematu wkradła nam się pułapka wachlarzowa pomiędzy encjami \emph{Użytkownik}, \emph{Turniej} oraz \emph{Zakład}.
+Jej wynikiem był brak możliwości zapytania o wszystkie zakłady jednego użytkownika w ramach jednego turnieju. Pułapkę zlikwidowaliśmy
+poprzez dodanie związku pomiędzy encjami \emph{Turniej} oraz \emph{Zakład}. Po takiej modyfikacji zakład przechowuje informację w ramach jakiego turnieju został on stworzony
+co umożliwia zliczanie punktów.
+\newpage
+\subsection{Pułapki szczelinowe}
+Pułapką szczelinową nazywamy sytuację w której nie ma jednoznacznego połączenia pomiędzy encjami, połączonych związkami $1$:n w następujący sposób.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.4]{./szczelina.png}
+	\caption{Przykład pułapki szczelinowej przedstawionej na wykładzie\cite{Kowalczyk1}}
+\end{figure}
+
+Niepoprawnym jest założenie że zawsze znajdzie się połączenie po środku, brak połączenia nazywamy szczeliną. Rozwiązaniem 
+tej sytuacji jest dodanie kolejnego związku między skrajnymi encjami. \\
+\\
+W przedstawionym projekcie, po wnikliwej analizie stwierdziliśmy brak sensownych pułapek szczelinowych, tj. istnieją 
+takie połączenia spełniające wymagania pułapki szczelinowej ale z punktu biznesowego takie połączenia nie mają sensu, dlatego też 
+zostają one świadomie pominięte.	
 
 
 \chapter{Model logiczny}
 
 \section{Charakterystyka modelu relacyjnego}
+Model relacyjny został wprowadzony przez pracownika IBM, Edgara Franka Codda w 1970 roku\cite{Codd}. Model 
+ten opisuje dane za pomocą tabel nazywanych relacjami, które przechowują atomowe dane. Na relacjach są dobrze
+zdefiniowane operacje wyszukiwania, dodawania danych i ich edycji. Dodatkowo, w łatwy sposób 
+definiowane są warunki spójności: zależności kluczowe i zawierania oraz ograniczenia na wartości danych poprzez
+typy czy dopuszczalne zbiory wartości.\\
+\\
+\indent Daleko posunięta niezależność danych zezwala na modyfikacje wewnętrznej reprezentacji
+danych, uporządkowania rekordów czystruktury plików bez wpływu na aplikacje
+wykorzystujące dane.
 
 \section{Usunięcie właściwości niekompatybilnych z modelem relacyjnym}
+\subsection{Tablice bridge'ujące}
+Najpoważniejszą niekompatybilnością logicznego modelu relacyjnego z modelem konceptualnym jest odwzorowanie związków
+wiele do wielu. W modelu relacyjnym są one niedopuszczalne. Rozwiązaniem problemu jest wprowadzanie tablic bridge'ujących.
+Pozwalają one na reprezentację związków wiele do wielu za pomocą kolumn odpowiadających kluczom głównym zbiorów encji biorących
+udział w związku\cite{Kowalczyk1}.\\
+\\
+\indent W prezentowanym wcześniej modelu konceptualnym występowały cztery związki wiele do wielu: 
+\\
+\begin{itemize}
+	\item \emph{Użytkownik} - \emph{Turniej}
+	\item \emph{Drużyna} - \emph{Turniej}
+	\item \emph{Drużyna} - \emph{Zawodnik}
+	\item \emph{Drużyna} - \emph{Trener}
+\end{itemize}
+\vspace{0.5cm}
+Dla każdego związku, stworzona została odpowiadająca jej tablica: \\
+\\
+\begin{threeparttable}[H]
+	\begin{tabular}{|p{0.5\linewidth}|p{0.43\linewidth}|}
+	\hline
+	Związek n:m &  Bridge \\ \hline
+	\emph{Użytkownik} - \emph{Turniej} & \emph{ZapisUżytkownika} \\ \hline
+	\emph{Drużyna} - \emph{Turniej} &  \emph{ZapisDrużyny} \\ \hline
+	\emph{Drużyna} - \emph{Zawodnik} &  \emph{KontraktZawodnika} \\ \hline
+	\emph{Drużyna} - \emph{Trener} &  \emph{KontraktTrenerski} \\ \hline
+	\end{tabular}	
+	\caption{Zrealizowana zamiana związków wiele do wielu na tablice bridge'ujące}
+\end{threeparttable}
+\vspace{0.5cm}
 
+Dodatkowo, do tablic \emph{KontraktZawodnika} i \emph{KontraktTrenerski} dodane zostały dodatkowe 
+atrybuty \emph{DataZawarcia} i \emph{DataZakończenia}. Pozwala to na przechowywanie informacji o historii
+(z zachowaniem chronologii) oraz informacji o tym który kontrakt jest aktualnie ważny (jest to ten bez 
+daty zakończenia).
+
+
+\newpage
 \section{Proces normalizacji}
 
 \subsection{Pierwsza postać normalna}
@@ -585,9 +669,6 @@ w postaci liczbowego identyfikatora.
 \section{Przykłady zapytań i poleceń SQL odnoszących się do bazy danych}
 
 \begin{thebibliography}{9}
-
-	
-
 	\bibitem{Wrembel1}
 	  Robert Wrembel,
 	  \emph{Wykład z przedmiotu Bazy Danych. Wykład 3: Modelowanie danych, Model związków-encji}.,
@@ -599,7 +680,14 @@ w postaci liczbowego identyfikatora.
 	  Marcin Kowalczyk,
 	  \emph{Wykład z przedmiotu Wprowadzanie do Baz Danych}.,
 	  Warszawa,
-	  20018.
+	  2018.
+
+	\bibitem{Codd}
+	  Edgar Frank Codd,
+	  \emph{A relational model of data for large shared data banks}.
+	  Commun. ACM,
+	  New York,
+	  1970.
 	
 	\end{thebibliography}
 

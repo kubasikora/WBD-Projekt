@@ -73,6 +73,14 @@
 \tableofcontents
 
 \chapter{Zakres i cel projektu}
+
+\section{Cel projektu}
+Celem projektu jest poprawne zaprojektowanie relacyjnej bazy danych oraz jej
+fizyczna implementacja przy użyciu systemu Oracle. W trakcie projektowania należy
+odpowiednio podzielić fazy projektowania na poziom konceptualny oraz logiczny a także 
+doprowadzić projekt bazy do trzeciej postaci normalnej.
+
+\section{Założenia projektowe}
 Realizowany projekt dotyczy biurowego systemu obstawiania meczów
 na dużych turniejach sportowych. System ten zajmuje się zbieraniem 
 zakładów od swoich użytkowników oraz prowadzeniem statystyk. 
@@ -120,15 +128,16 @@ W ramach systemu zdefiniowaliśmy trzy typy potencjalnych użytkowników: \\
     
 \end{enumerate}
 
-\section{Zdefiniowane transakcje}
-Do zdefiniowania transakcji posłużyliśmy się metodyką User Stories znanych z metodyki Agile. Wcieliśmy się 
+\section{Zdefiniowane funkcjonalności}
+Do zdefiniowania funkcjonalności posłużyliśmy się metodyką User Stories znanych z metodyki Agile. Wcieliśmy się 
 w rolę każdego z użytkowników i opisaliśmy potrzebne funkcjonalności według znanego schematu:
 
 \begin{center}
     \emph{Jako} osoba ..., \\ \emph{potrzebuję/chcę} takiej funkcjonalności ...,\\  \emph{ponieważ} pozwoli mi to ...  
 \end{center}
 
-Na podstawie tak opisanych funkcjonalności, w łatwy sposób mogliśmy zdefiniować transakcje w systemie.
+Na podstawie tak opisanych funkcjonalności, w łatwy sposób mogliśmy zdefiniować potrzebne transakcje w systemie. Dodatkowo,
+taki sposób opisu funkcjonalności już na etapie projektowania sprawdza ich przydatność.
 
 \subsection{Użytkownik systemu}
 
@@ -147,9 +156,57 @@ Na podstawie tak opisanych funkcjonalności, w łatwy sposób mogliśmy zdefinio
 \subsubsection{Edycja zakładu długoterminowego}
 \emph{Jako użytkownik, potrzebuję móc edytować zakład długoterminowego na zwycięzce turnieju na który się zapisałem a który jeszcze się nie rozpoczął, ponieważ pozwoli mi to na zmianę zdania i poprawienie swojego zakładu.}
 
+\subsubsection{Podgląd tabeli}
+\emph{Jako użytkownik, potrzebuję móc sprawdzać który jestem w tabeli wyników, ponieważ potrzebuję informacji o ewentualnym zwycięstwie.}
+
 \subsection{Statystyk}
 \subsubsection{Dodawanie turniejów}
 \emph{Jako statystyk, potrzebuję możliwości dodawania turniejów, ponieważ wtedy użytkownicy będą mogli się na nie zapisywać.}
+
+\subsubsection{Dodawanie meczów}
+\emph{Jako statystyk, potrzebuję możliwości dodawania meczów w ramach turniejów, ponieważ wtedy użytkownicy będą mogli się próbować obstawić ich wynik.}
+
+\subsubsection{Dodawanie drużyn}
+\emph{Jako statystyk, potrzebuję możliwości dodawania drużyn do systemu, ponieważ wtedy będę mógł je podpinać pod turnieje.}
+
+\subsubsection{Podpinanie drużyn do turniejów}
+\emph{Jako statystyk, potrzebuję możliwości dodawania drużyn jako uczestników turniejów, ponieważ wtedy będę mógł dodawać mecze do turniejów pomiędzy nimi.}
+
+\subsubsection{Dodawanie stadionów}
+\emph{Jako statystyk, potrzebuję możliwości dodawania stadionów do systemu, ponieważ wtedy będę mógł podpinać stadiony do meczów.}
+
+\subsubsection{Podpinanie stadionów}
+\emph{Jako statystyk, potrzebuję możliwości podpinania stadionów do meczów, ponieważ wtedy użytkownicy będą więcej wiedzieli o meczu co pozwoli im lepiej obstawić.}
+
+\subsubsection{Dodawanie sędziów}
+\emph{Jako statystyk, potrzebuję możliwości dodawania sędziów, ponieważ wtedy będę mógł podpinać sędziów głównych do spotkań.}
+
+\subsubsection{Podpinanie sędziów}
+\emph{Jako statystyk, potrzebuję możliwości podpinania sędziów do meczów, ponieważ wtedy użytkownicy będą więcej wiedzieli o meczu co pozwoli im lepiej obstawić.}
+
+\subsubsection{Dodawanie wyników meczów}
+\emph{Jako statystyk, potrzebuję możliwości dodawania wyników zakończonych już spotkań, ponieważ wtedy użytkownicy będą mogli zweryfikować swoje zakłady.}
+
+\subsubsection{Dodawania zwycięzców turniejów}
+\emph{Jako statystyk, potrzebuję możliwości dodawania zwycięzców turniejów, ponieważ wtedy użytkownicy będą mogli zweryfikować swoje zakłady długoterminowe.}
+
+
+\subsection{Administrator}
+\subsubsection{Dodawanie użytkowników}
+\emph{Jako administrator, potrzebuję możliwości tworzenia kont dla użytkowników, ponieważ wtedy będą mogli wziąc udział w grze.}
+
+\subsubsection{Zmiana hasła użytkownika}
+\emph{Jako administrator, potrzebuję możliwości zmiany hasła użytkownika, ponieważ wtedy będę mógł przywrócić dostęp tym którzy zapomnieli hasła.}
+
+
+
+
+
+
+
+
+
+
 
 
 \chapter{Model konceptualny}

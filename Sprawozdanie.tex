@@ -220,6 +220,7 @@ Na podstawie analizy założeń projektowych założyliśmy następujący zbiór
 	\item Stadion
 	\item Trener
 	\item Sędzia
+	\item Zawodnik
 \end{itemize}
  
 \vspace{1cm}
@@ -248,7 +249,7 @@ Na podstawie analizy założeń projektowych założyliśmy następujący zbiór
 	\begin{tablenotes}
 		\item [1] skrót od ZakładDługoterminowy
 	\end{tablenotes}	
-	\caption{Tabela typów związków}
+	\caption{Typy wszystkich związków w schemacie}
 \end{threeparttable}
 
 \subsubsection{Użytkownik - Zakład}
@@ -470,16 +471,85 @@ może w swoim życiu być związany z kilkoma (rekordziści nawet z kilkunastoma
 	\caption{Atrybuty encji Sędzia}
 \end{table}
 
+\subsubsection{Zawodnik}
+\begin{table}[H]
+	\begin{tabular}{|p{0.25\linewidth}|p{0.2\linewidth}|p{0.2\linewidth}|p{0.25\linewidth}|}
+	\hline
+	Nazwa atrybutu & Typ i dziedzina & Obowiązkowy? & Opis                                                           \\ \hline
+	SędziaId   & liczbowy                            & TAK                              & Numer identyfikujący sędziego                                                   \\ \hline
+	Imię         & napisowy                           & TAK                              & Imię/imiona sędziego        \\ \hline
+	Nazwisko	   & liczbowy							& TAK								& Nazwisko sędziego \\  \hline
+	DataUrodzenia          & datowy                           & TAK                              & Data urodzenia sędziego              \\ \hline
+	Narodowość           & napisowy                            & TAK                              & Kraj pochodzenia   \\ \hline
+	Numer           & liczbowy                            & TAK                              & Kraj pochodzenia   \\ \hline
+	\end{tabular}
+	\caption{Atrybuty encji Sędzia}
+\end{table}
+
 \section{Dodatkowe reguły integralnościowe}
 
 Należy zapewnić aby w systemie nie doszło do sytuacji że zwycięzcą danego turnieju jest drużyna która nie jest jego uczestnikiem.
 Zgodnie podjęliśmy decyzję projektową że to zabezpieczenie zostanie zrealizowane po stronie aplikacji a nie po stronie bazy danych.
 
+\vspace{2cm}
 \section{Klucze kandydujące i główne}
 
+Dla każdej encji spróbowaliśmy znaleźć unikalny klucz. Wyniki naszych starań znajdują się w
+tabeli poniżej.
 
+\vspace{1cm}
+\begin{threeparttable}[H]
+	\begin{tabular}{|p{0.5\linewidth}|p{0.43\linewidth}|}
+	\hline
+	Relacja & Klucz kandydujący \\ \hline
+	Użytkownik & Login \\ \hline
+	Mecz &  --- \\ \hline
+	Drużyna &  Nazwa \\ \hline
+	Zawodnik &  Imię \& Nazwisko \\ \hline
+	Stadion &  Adres \& Nazwa \\ \hline
+	Zakład &  --- \\ \hline
+	Wynik &  --- \\ \hline
+	Turniej &  Nazwa \\ \hline
+	Sędzia & Imię \& Nazwisko \\ \hline
+	Trener & Imię \& Nazwisko \\ \hline
+	ZakładDługoterminowy &  --- \\ \hline
+	\end{tabular}	
+	\caption{Proponowane klucze kandydujące}
+\end{threeparttable}
+\vspace{1cm}
+
+W tabeli znajdują się niepoprawne klucze takie jak kombinację imienia i nazwiska, które należy z miejsca odrzucić, pomimo faktu że prawdopodobieństwo
+istnienia dwóch zawodników o tym samym imieniu i nazwisku jest niezwykle niskie (niskie nie znaczy zerowe). 
+Dodatkowo, doszliśmy do wniosku że nazwy turniejów z góry nie muszą być unikalne. To samo tyczy się nazw drużyn, które mogą
+prowadzić różne sekcje o tej samej nazwie. Po kolei odrzucając kolejne klucze, zdecydowaliśmy że jedynym sensownym kluczem kandydującym
+jest \emph{Login} w encji \emph{Użytkownik}, który musi być unikalny. \\
+\\
+Z tego też powodu podjęliśmy kolejną decyzją projektową jaką było wstawienie do każdej encji sztucznego klucza głównego 
+w postaci liczbowego identyfikatora. 
+
+\vspace{1cm}
+\begin{threeparttable}[H]
+	\begin{tabular}{|p{0.3\linewidth}|p{0.35\linewidth}|p{0.25\linewidth}|}
+	\hline
+	Relacja & Klucz główny & Klucz kandydujący \\ \hline
+	Użytkownik & UżytkownikId & Login \\ \hline
+	Mecz & MeczId & --- \\ \hline
+	Drużyna & DrużynaId & --- \\ \hline
+	Zawodnik & ZawodnikId & --- \\ \hline
+	Stadion & StadionId & --- \\ \hline
+	Zakład & ZakładId & --- \\ \hline
+	Wynik & WynikId & --- \\ \hline
+	Turniej & TurniejId & --- \\ \hline
+	Sędzia & SędziaId & --- \\ \hline
+	Trener & TrenerId & --- \\ \hline
+	ZakładDługoterminowy & ZakładDługoterminowyId & --- \\ \hline
+	\end{tabular}	
+	\caption{Klucze główne i pozostałe kandydujące}
+\end{threeparttable}
+\vspace{1cm}
 
 \section{Schemat ER na poziomie konceptualnym}
+\newpage
 
 \section{Problem pułapek szczelinowych i wachlarzowych – analiza i przykłady}
 

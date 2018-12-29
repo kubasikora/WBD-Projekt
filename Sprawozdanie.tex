@@ -24,8 +24,6 @@
 \usepackage{listings}
 
 
-
-
 \SendSettingsToPgf
 \title{\bf System biurowych zakładów wzajemnych \vskip 0.1cm}
 \author{Robert Wojtaś \and Jakub Sikora}
@@ -199,19 +197,160 @@ taki sposób opisu funkcjonalności już na etapie projektowania sprawdza ich pr
 \emph{Jako administrator, potrzebuję możliwości zmiany hasła użytkownika, ponieważ wtedy będę mógł przywrócić dostęp tym którzy zapomnieli hasła.}
 
 
-
-
-
-
-
-
-
-
-
-
 \chapter{Model konceptualny}
+Modelem konceptualnym nazywamy pewną reprezentację obiektów świata rzeczywistego 
+w uniwersalnym modelu niezależnym od implementacji \cite{Wrembel1}. Poprawny model 
+konceptualny jest dobrym punktem wyjścia, ponieważ pozwala na przemyślenie jakie
+dane tak naprawdę chcemy przechowywać w projektowanej bazie oraz pozwala na usystematyzowanie
+związków między danymi.
 
 \section{Definicja zbiorów encji określonych w projekcie}
+\vspace{1.5cm}
+\subsubsection{Użytkownik}
+\begin{table}[H]
+	\begin{tabular}{|p{0.25\linewidth}|p{0.2\linewidth}|p{0.2\linewidth}|p{0.25\linewidth}|}
+	\hline
+	Nazwa atrybutu & Typ i dziedzina & Obowiązkowy? & Opis                                                           \\ \hline
+	UżytkownikId   & liczbowy                            & TAK                              & Numer identyfikujący użytkownika                                                   \\ \hline
+	Login          & napisowy                            & TAK                              & Login do systemu oraz nazwa pod którą użytkownik będzie widoczny w systemie         \\ \hline
+	Hasło          & napisowy                            & TAK                              & Hash hasła, którym użytkownik będzie logował się do systemu                        \\ \hline
+	Salt           & napisowy                            & TAK                              & Ciąg znaków zaburzający hasło, celem utrudnienia jego złamania                     \\ \hline
+	Imię           & napisowy                            & TAK                              & Imię użytkownika, wymagane do identyfikacji i ewentualnego przekazania nagrody     \\ \hline
+	Nazwisko       & napisowy                            & TAK                              & Nazwisko użytkownika, wymagane do identyfikacji i ewentualnego przekazania nagrody \\ \hline
+	\end{tabular}
+	\caption{Atrybuty encji Użytkownik}
+\end{table}
+\newpage
+
+\subsubsection{Mecz}
+\begin{table}[H]
+	\begin{tabular}{|p{0.25\linewidth}|p{0.2\linewidth}|p{0.2\linewidth}|p{0.25\linewidth}|}
+	\hline
+	Nazwa atrybutu & Typ i dziedzina & Obowiązkowy? & Opis                                                           \\ \hline
+	MeczId   & liczbowy                            & TAK                              & Numer identyfikujący mecz                                                  \\ \hline
+	DataRozpoczęcia          & datowy                            & TAK                              & Dzień i godzina rozpoczęcia meczu, do tego momentu można dodawać zakłady.       \\ \hline
+	\end{tabular}
+	\caption{Atrybuty encji Mecz}
+\end{table}
+
+\vspace{1cm}
+
+\subsubsection{Zakład}
+\begin{table}[H]
+	\begin{tabular}{|p{0.25\linewidth}|p{0.2\linewidth}|p{0.2\linewidth}|p{0.25\linewidth}|}
+	\hline
+	Nazwa atrybutu & Typ i dziedzina & Obowiązkowy? & Opis                                                           \\ \hline
+	ZakładId   & liczbowy                            & TAK                              & Numer identyfikujący zakładu                                                   \\ \hline
+	WynikGospodarzy         & liczbowy                           & TAK                              & Przewidywany wynik zdobyty przez drużynę gospodarzy         \\ \hline
+	WynikGości          & liczbowy                            & TAK                              & Przewidywany wynik zdobyty przez drużynę gości                        \\ \hline
+	DataZawarcia           & datowy                            & TAK                              & Data i godzina dodania/ostatniej edycji zakładu                 \\ \hline
+	\end{tabular}
+	\caption{Atrybuty encji Zakład}
+\end{table}
+
+\vspace{1cm}
+
+\subsubsection{Wynik}
+\begin{table}[H]
+	\begin{tabular}{|p{0.25\linewidth}|p{0.2\linewidth}|p{0.2\linewidth}|p{0.25\linewidth}|}
+	\hline
+	Nazwa atrybutu & Typ i dziedzina & Obowiązkowy? & Opis                                                           \\ \hline
+	WynikId   & liczbowy                            & TAK                              & Numer identyfikujący wynik                                                   \\ \hline
+	WynikGospodarzy         & liczbowy                            & TAK                              & Faktyczny wynik zdobyty przez drużynę gospodarzy         \\ \hline
+	WynikGości          & liczbowy                            & TAK                              & Faktyczny wynik zdobyty przez drużynę gości                        \\ \hline
+	DataDodania           & datowy                            & TAK                              & Data i godzina dodania wyniku, potrzebna przy ewentualnej weryfikacji    \\ \hline
+	\end{tabular}
+	\caption{Atrybuty encji Wynik}
+\end{table}
+
+\newpage
+
+\subsubsection{Zakład Długoterminowy}
+\begin{table}[H]
+	\begin{tabular}{|p{0.25\linewidth}|p{0.2\linewidth}|p{0.2\linewidth}|p{0.25\linewidth}|}
+	\hline
+	Nazwa atrybutu & Typ i dziedzina & Obowiązkowy? & Opis                                                           \\ \hline
+	ZakładDługotermi- nowyId   & liczbowy                            & TAK                              & Numer identyfikujący zakład długoterminowy                                                  \\ \hline
+	DataZawarcia          & datowy                            & TAK                              & Data i godzina dodania/ostatniej edycji zakładu.       \\ \hline
+	\end{tabular}
+	\caption{Atrybuty encji Zakład Długoterminowy}
+\end{table}
+
+\vspace{1cm}
+
+\subsubsection{Turniej}
+\begin{table}[H]
+	\begin{tabular}{|p{0.25\linewidth}|p{0.2\linewidth}|p{0.2\linewidth}|p{0.25\linewidth}|}
+	\hline
+	Nazwa atrybutu & Typ i dziedzina & Obowiązkowy? & Opis                                                           \\ \hline
+	TurniejId   & liczbowy                            & TAK                              & Numer identyfikujący turniej  \\ \hline
+	Nazwa   & napisowy                            & TAK                              & Pełna nazwa turnieju  \\ \hline
+	DataRozpoczęcia          & datowy                            & TAK                              & Data i godzina rozpoczęcia turnieju, tj. pierwszego spotkania w tym turnieju.       \\ \hline
+	\end{tabular}
+	\caption{Atrybuty encji Turniej}
+\end{table}
+
+\vspace{1cm}
+
+\subsubsection{Drużyna}
+\begin{table}[H]
+	\begin{tabular}{|p{0.25\linewidth}|p{0.2\linewidth}|p{0.2\linewidth}|p{0.25\linewidth}|}
+	\hline
+	Nazwa atrybutu & Typ i dziedzina & Obowiązkowy? & Opis                                                           \\ \hline
+	DrużynaId   & liczbowy                            & TAK                              & Numer identyfikujący drużynę                                                   \\ \hline
+	Nazwa         & napisowy                           & TAK                              & Pełna nazwa drużyny         \\ \hline
+	Miasto          & napisowy                            & TAK                              & Miasto z którego pochodzi drużyna                        \\ \hline
+	Narodowość           & napisowy                            & TAK                              & Kraj z którego pochodzi drużyna                 \\ \hline
+	\end{tabular}
+	\caption{Atrybuty encji Drużyna}
+\end{table}
+
+\newpage
+
+\subsubsection{Stadion}
+\begin{table}[H]
+	\begin{tabular}{|p{0.25\linewidth}|p{0.2\linewidth}|p{0.2\linewidth}|p{0.25\linewidth}|}
+	\hline
+	Nazwa atrybutu & Typ i dziedzina & Obowiązkowy? & Opis                                                           \\ \hline
+	StadionId   & liczbowy                            & TAK                              & Numer identyfikujący stadion                                                   \\ \hline
+	Nazwa         & napisowy                           & TAK                              & Pełna nazwa areny         \\ \hline
+	Pojemność 	   & liczbowy							& TAK								& Pojemność widowni \\  \hline
+	Miasto          & napisowy                            & TAK                              & Miasto w którym znajduje się stadion                       \\ \hline
+	Narodowość           & napisowy                            & TAK                              & Nazwa ulicy przy której znajduje się stadion   \\ \hline
+	\end{tabular}
+	\caption{Atrybuty encji Stadion}
+\end{table}
+
+\subsubsection{Trener}
+\begin{table}[H]
+	\begin{tabular}{|p{0.25\linewidth}|p{0.2\linewidth}|p{0.2\linewidth}|p{0.25\linewidth}|}
+	\hline
+	Nazwa atrybutu & Typ i dziedzina & Obowiązkowy? & Opis                                                           \\ \hline
+	TrenerId   & liczbowy                            & TAK                              & Numer identyfikujący trenera                                                   \\ \hline
+	Imię         & napisowy                           & TAK                              & Imię/imiona trenera        \\ \hline
+	Nazwisko	   & liczbowy							& TAK								& Nazwisko trenera \\  \hline
+	DataUrodzenia          & datowy                           & TAK                              & Data urodzenia trenera              \\ \hline
+	Narodowość           & napisowy                            & TAK                              & Kraj pochodzenia   \\ \hline
+	\end{tabular}
+	\caption{Atrybuty encji Trener}
+\end{table}
+
+\vspace{1cm}
+
+\subsubsection{Sędzia}
+\begin{table}[H]
+	\begin{tabular}{|p{0.25\linewidth}|p{0.2\linewidth}|p{0.2\linewidth}|p{0.25\linewidth}|}
+	\hline
+	Nazwa atrybutu & Typ i dziedzina & Obowiązkowy? & Opis                                                           \\ \hline
+	SędziaId   & liczbowy                            & TAK                              & Numer identyfikujący sędziego                                                   \\ \hline
+	Imię         & napisowy                           & TAK                              & Imię/imiona sędziego        \\ \hline
+	Nazwisko	   & liczbowy							& TAK								& Nazwisko sędziego \\  \hline
+	DataUrodzenia          & datowy                           & TAK                              & Data urodzenia sędziego              \\ \hline
+	Narodowość           & napisowy                            & TAK                              & Kraj pochodzenia   \\ \hline
+	\end{tabular}
+	\caption{Atrybuty encji Sędzia}
+\end{table}
+\newpage
 
 \section{Ustalenie związków i ich typów między encjami}
 
@@ -236,7 +375,7 @@ taki sposób opisu funkcjonalności już na etapie projektowania sprawdza ich pr
 \section{Proces normalizacji}
 
 \subsection{Pierwsza postać normalna}
-\subsection{Drugaa postać normalna}
+\subsection{Druga postać normalna}
 \subsection{Trzecia postać normalna}
 
 
@@ -255,5 +394,15 @@ taki sposób opisu funkcjonalności już na etapie projektowania sprawdza ich pr
 \section{Skrypt SQL zakładający bazę danych}
 
 \section{Przykłady zapytań i poleceń SQL odnoszących się do bazy danych}
+
+\begin{thebibliography}{9}
+
+	\bibitem{Wrembel1}
+	  Robert Wrembel,
+	  \emph{Wykład z przedmiotu Bazy Danych: Modelowanie danych, Model związków-encji}.,
+	  Poznań,
+	  2006.
+	
+	\end{thebibliography}
 
 \end{document}

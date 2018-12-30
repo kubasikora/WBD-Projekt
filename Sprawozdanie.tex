@@ -70,6 +70,9 @@
 \maketitle
 
 \tableofcontents
+\listoftables
+\listoffigures
+
 
 \chapter{Zakres i cel projektu}
 
@@ -188,6 +191,9 @@ taki sposób opisu funkcjonalności już na etapie projektowania sprawdza ich pr
 
 \subsubsection{Dodawania zwycięzców turniejów}
 \emph{Jako statystyk, potrzebuję możliwości dodawania zwycięzców turniejów, ponieważ wtedy użytkownicy będą mogli zweryfikować swoje zakłady długoterminowe.}
+
+\subsubsection{Aktualizowanie składów drużyn}
+\emph{Jako statystyk, potrzebuję możliwości aktualizowania składów drużyn, ponieważ wtedy statystyki będą aktualne.}
 
 
 \subsection{Administrator}
@@ -481,7 +487,7 @@ może w swoim życiu być związany z kilkoma (rekordziści nawet z kilkunastoma
 	Nazwisko	   & liczbowy							& TAK								& Nazwisko sędziego \\  \hline
 	DataUrodzenia          & datowy                           & TAK                              & Data urodzenia sędziego              \\ \hline
 	Narodowość           & napisowy                            & TAK                              & Kraj pochodzenia   \\ \hline
-	Numer           & liczbowy                            & TAK                              & Kraj pochodzenia   \\ \hline
+	Numer           & liczbowy                            & TAK                              & Numer na koszulce   \\ \hline
 	\end{tabular}
 	\caption{Atrybuty encji Sędzia}
 \end{table}
@@ -593,6 +599,7 @@ takie połączenia spełniające wymagania pułapki szczelinowej ale z punktu bi
 zostają one świadomie pominięte.	
 
 \section{Schemat ER na poziomie konceptualnym}
+Schemat ER na poziome konceptualnym znajduje się w załączniku A dołączonym na końcu sprawozdania.
 
 \chapter{Model logiczny}
 
@@ -644,8 +651,8 @@ atrybuty \emph{DataZawarcia} i \emph{DataZakończenia}. Pozwala to na przechowyw
 daty zakończenia).
 
 \subsection{Liczby mnogie}
-W związku z inną konwencją nazewniczą, zmieniliśmy nazwy relacji tak aby ich nazwy były w liczbie mnogiej.
-
+W związku z inną konwencją nazewniczą, zmieniliśmy nazwy relacji tak aby ich nazwy były w liczbie mnogiej.\\
+\\
 \begin{threeparttable}[H]
 	\begin{tabular}{|p{0.5\linewidth}|p{0.43\linewidth}|}
 	\hline
@@ -670,6 +677,10 @@ W związku z inną konwencją nazewniczą, zmieniliśmy nazwy relacji tak aby ic
 \end{threeparttable}
 \vspace{0.5cm}
 
+\subsection{Typy danych}
+W modelu konceptualnym, określiliśmy typy danych w sposób bardzo ogólny. Na tym etapie dokonamy ich 
+specyfikacji, typowi liczbowemu przypisaliśmy typ \texttt{INTEGER}, typowi napisowemu przyporządkowaliśmy typ \texttt{VARCHAR}
+a typowi datowemu typ \texttt{DATE}. Długość typów napisowych została dostosowana do potencjalnych wartości opisywanego atrybutu.
 
 \section{Proces normalizacji}
 Normalizacja bazy polega na eliminacji powtarzających się (redundantych) wpisów. W bazie 
@@ -752,21 +763,68 @@ Liverpool'u wie że ich stadion znajduje się przy Anfield Road, jednak mało kt
 się na pozostawienie atrybutu \emph{Miasto} oraz złączenie pozostałych atrybutów adresowych w jeden \emph{Adres}, który nie będzie przechowywał
 informacji pocztowych a jedynie te pozwalające na wizualną identyfikację położenia stadionu.
 
-\subsubsection{Relacja \emph{Wyniki}}
+\subsubsection{Relacja \emph{Wyniki} (również ponownie)}
 Wyodrębnienie relacji \emph{SłownikWyników} na pierwszy rzut oka wydaje się doskonałym pomysłem, jednak dodaje dodatkowy narzut obliczeniowy
 na silnik bazy danych. Duplikacja wyniku spotkania (dwóch liczb!) nie wydaje się taką niedogodnością jaką jest znacznie dłuższy czas dostępu do danych, dlatego też 
 zdecydowaliśmy się na wycofanie się z wprowadzonych zmian i powrót do pierwotnej wersji gdzie pola \emph{WynikGospodarzy} oraz \emph{WynikGości}
 nie są wyodrębnione do osobnej encji tylko są atrybutami encji \emph{Wynik}.
 
 \section{Schemat ER na poziomie modelu logicznego}
+Schemat ER na poziome modelu logicznego znajduje się w załączniku B dołączonym na końcu sprawozdania.
 
 \chapter{Faza fizyczna}
 
-\section{Projekt transakcji i weryfikacja ich wykonalności}
+\section{Weryfikacja wykonywalności transakcji}
 
-\section{Strojenie bazy danych – dobór indeksów}
+\vspace{1cm}
+\begin{threeparttable}[H]
+	\begin{tabular}{|p{0.3\linewidth}|p{0.35\linewidth}|p{0.25\linewidth}|}
+	\hline
+	Transakcja & Potrzebne zasoby & Wykonalne? \\ \hline
+	Zapis na turniej & Turnieje, ZapisUżytkowników & TAK \\ \hline
+	Utworzenie zakładu & Zakłady, Mecze & TAK \\ \hline
+	Edycja zakładu & Zakłady & TAK \\ \hline
+	Utworzenie zakładu długoterminowego & ZakładyDługoterminowe, Drużyne, Turnieje & TAK \\ \hline
+	Edycja zakładu długoterminowego & ZakładyDługoterminowe, Drużyne & TAK \\ \hline
+	Podgląd tabeli wyników  & Mecze, Turnieje, Zakłady, Użytkownicy, ZakładyDługoterminowe & TAK \\ \hline
+	Utworzenie turnieju & Turnieje & TAK \\ \hline
+	Zapis drużyny na turniej & Turnieje, drużyny & TAK \\ \hline
+	Dodanie meczu & Mecze, Stadiony, Sędziowie, Drużyny & TAK \\ \hline
+	Dodanie drużyny & Drużyny & TAK \\ \hline
+	Dodanie wyniku & Wyniki, Mecze & TAK \\ \hline
+	Dodanie stadionu & Stadiony & TAK \\ \hline
+	Dodanie sędziów & Sędziowie & TAK \\ \hline
+	Dodanie trenerów & Trenerzy & TAK \\ \hline
+	Dodanie zwycięzcy turnieju & Turnieje, Drużyny & TAK \\ \hline
+	Aktualizowanie składów drużyn & Drużyny, Zawodnicy, Trenerzy & TAK \\ \hline
+	Utworzenie konta & Użytkownicy & TAK \\ \hline
+	Zmiana hasła & Użytkownicy & TAK \\ \hline
+	\end{tabular}	
+	\caption{Wyniki zweryfikowania wykonywalności transakcji}
+\end{threeparttable}
+\vspace{1cm}
+\section{Dobór indeksów}
+Indeks jest specjalną strukturą danych wprowadzoną w celu 
+zwiększenia prędkości wykonywania operacji na tabeli.
+Wykorzystuje się je przy zapytaniach typu DQL (SELECT), które mają na celu wyszukiwanie
+odpowiednich wartości w bazie danych. Podczas realizacji zapytania optymalizator
+najpierw przeszukuje indeks, który jest uporządkowany, a następnie na podstawie indeksu 
+odczytuje odpowiednie rekordy. Indeks posiada strukturę logiczną i fizyczną niezależną od 
+tabeli, do jakiej się odwołuje. Posiada również własną przestrzeń dyskową oraz jest automatycznie 
+utrzymywany przez system zarządzania bazą danych\cite{msdn}.
+\\
+\\
+\indent W celu poprawienia wydajności podczas pracy z bazą danych, 
+zostały dobrane indeksy w miejscu, w którym wyszukiwania danych będą najczęstsze - w tabeli zakładów.
+\\ \\
+Ostatecznie założyliśmy dwa indeksy na kolumnach definiujących związki:
+\begin{itemize}
+	\item MeczId
+	\item UżytkownikId
+\end{itemize}
 
 \section{Skrypt SQL zakładający bazę danych}
+Skrypt zakładający bazę danych znajduje się w załączniku C dołączonym na końcu sprawozdania.
 
 \section{Przykłady zapytań i poleceń SQL odnoszących się do bazy danych}
 
@@ -791,6 +849,12 @@ nie są wyodrębnione do osobnej encji tylko są atrybutami encji \emph{Wynik}.
 	  New York,
 	  1970.
 
+	\bibitem{msdn}
+	  Jacek Włodarski,
+	  \emph{SQL Server – Indeksy – kiedy i jak je stosować?}.
+	  MSDN@Microsoft,
+	  2011.
+
 	\bibitem{UNDA}
 	  Worldwide Narrow Vision Gang,
 	  \emph{Rewers}.
@@ -798,6 +862,17 @@ nie są wyodrębnione do osobnej encji tylko są atrybutami encji \emph{Wynik}.
 	  Gdynia,
 	  2018.
 	
-	\end{thebibliography}
+\end{thebibliography}
+
+\appendix
+\chapter{Schemat ER na poziomie konceptualnym}
+
+\chapter{Schemat ER na poziomie modelu logicznego}
+
+\chapter{Skrypt zakładający bazę danych}
+
+\clearpage
+\phantomsection
+	
 
 \end{document}

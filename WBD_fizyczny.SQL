@@ -226,6 +226,13 @@ CREATE TABLE "ZapisyDruzyn"(
 /
 
 
+-- Create indexes 
+CREATE INDEX IX_Zaklad_stawia_Mecz ON “Zaklady” (“MeczId”) 
+/
+
+CREATE INDEX IX_Uzytkownik_stawia ON “Zaklady” (“UżytkownikId”) 
+/
+
 -- Create foreign keys (relationships) section ------------------------------------------------- 
 
 ALTER TABLE "Mecze" ADD CONSTRAINT "wystepuje jako gospodarz" FOREIGN KEY ("DruzynaGospodarzyId") REFERENCES "Drużyny" ("DruzynaId")

@@ -1,6 +1,6 @@
 ﻿/*
 Created: 28.12.2018
-Modified: 28.12.2018
+Modified: 30.12.2018
 Model: WBD_logiczny
 Database: Oracle 11g Release 2
 */
@@ -30,7 +30,8 @@ CREATE TABLE "Zawodnicy"(
   "Imie" Varchar2(50 ) NOT NULL,
   "Nazwisko" Varchar2(50 ) NOT NULL,
   "DataUrodzenia" Date NOT NULL,
-  "Narodowosc" Varchar2(3 ) NOT NULL
+  "Narodowosc" Varchar2(3 ) NOT NULL,
+  "Numer" Integer NOT NULL
 )
 /
 
@@ -180,8 +181,17 @@ CREATE TABLE "Zaklady"(
   "WynikGosci" Integer NOT NULL,
   "DataZawarcia" Date NOT NULL,
   "MeczId" Integer NOT NULL,
-  "UzytkownikId" Integer NOT NULL
+  "UzytkownikId" Integer NOT NULL,
+  "TurniejId" Integer
 )
+/
+
+-- Create indexes for table Zaklady
+
+CREATE INDEX "IX_Uzytkownik_stawia" ON "Zaklady" ("UzytkownikId")
+/
+
+CREATE INDEX "IX_Zaklad_stawia_Mecz" ON "Zaklady" ("MeczId")
 /
 
 -- Add keys for table Zaklady
@@ -273,6 +283,10 @@ ALTER TABLE "ZakładyDlugoterminowe" ADD CONSTRAINT "obstawia zwyciezce" FOREIGN
 
 
 ALTER TABLE "Turnieje" ADD CONSTRAINT "wygrywa" FOREIGN KEY ("DruzynaId") REFERENCES "Drużyny" ("DruzynaId")
+/
+
+
+ALTER TABLE "Zaklady" ADD CONSTRAINT "obstawia w ramach" FOREIGN KEY ("TurniejId") REFERENCES "Turnieje" ("TurniejId")
 /
 
 

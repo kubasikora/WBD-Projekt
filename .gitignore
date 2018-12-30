@@ -67,3 +67,5 @@ typings/
 *.fls
 *.out
 *.synctex.gz
+*.lot
+*.lof

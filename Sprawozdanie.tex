@@ -832,6 +832,22 @@ Skrypt zakładający bazę danych znajduje się w załączniku C dołączonym na
 
 \section{Przykłady zapytań i poleceń SQL odnoszących się do bazy danych}
 
+\texttt{INSERT INTO Drużyny VALUES (10, ‘Real Madrid’, ‘Madryt’, 6); }\\
+
+\texttt{INSERT INTO Uzytkownicy VALUES (111, ‘BeastMaster64’, ‘dabkhsfbahfbia’, ‘ad5sdacagj613’, ‘ Felix’, ‘Khjellberg’); }
+\\ \\
+\texttt{INSERT INTO  Sedziowie  (SędziaId, Imię, Nazwisko, Narodowość) VALUES (1, ‘Howard’, ‘Webb’, 3); }
+\\ \\
+\texttt{SELECT DataZawarcia FROM Zaklady WHERE ZakladId = 10; }
+\\ \\
+\texttt{SELECT Pojemnosc FROM Stadiony WHERE Nazwa = ‘Estadio Santiago Bernabeu’;}
+\\ \\
+\texttt{SELECT * FROM Uzytkownicy WHERE Imię LIKE ‘J\%’; }
+\\ \\
+\texttt{SELECT Imię, Nazwisko, Numer FROM Zawodnicy ORDER BY Numer ASC; }
+\\ \\
+
+
 \begin{thebibliography}{9}
 	\bibitem{Wrembel1}
 	  Robert Wrembel,

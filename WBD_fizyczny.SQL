@@ -14,7 +14,7 @@ CREATE TABLE "Drużyny"(
   "DruzynaId" Integer NOT NULL,
   "Nazwa" Varchar2(50 ) NOT NULL,
   "Miasto" Varchar2(30 ) NOT NULL,
-  "Narodowosc" Varchar2(3 ) NOT NULL
+  "NarodowoscId" Integer NOT NULL
 )
 /
 
@@ -30,8 +30,8 @@ CREATE TABLE "Zawodnicy"(
   "Imie" Varchar2(50 ) NOT NULL,
   "Nazwisko" Varchar2(50 ) NOT NULL,
   "DataUrodzenia" Date NOT NULL,
-  "Narodowosc" Varchar2(3 ) NOT NULL,
-  "Numer" Integer NOT NULL
+  "Numer" Integer NOT NULL,
+  "NarodowoscId" Integer NOT NULL
 )
 /
 
@@ -47,7 +47,7 @@ CREATE TABLE "Trenerzy"(
   "Imie" Varchar2(50 ) NOT NULL,
   "Nazwisko" Varchar2(50 ) NOT NULL,
   "DataUrodzenia" Date NOT NULL,
-  "Narodowosc" Varchar2(3 ) NOT NULL
+  "Attribute1" Integer NOT NULL
 )
 /
 
@@ -79,7 +79,7 @@ CREATE TABLE "Sędziowie"(
   "Imię" Varchar2(50 ) NOT NULL,
   "Nazwisko" Varchar2(50 ) NOT NULL,
   "DataUrodzenia" Date NOT NULL,
-  "Narodowosc" Varchar2(3 ) NOT NULL
+  "NarodowoscId" Integer NOT NULL
 )
 /
 
@@ -235,6 +235,20 @@ CREATE TABLE "ZapisyDruzyn"(
 )
 /
 
+-- Table Narodowosci
+
+CREATE TABLE "Narodowosci"(
+  "NarodowoscId" Integer NOT NULL,
+  "Nazwa" Varchar2(30 ) NOT NULL,
+  "Skrot" Varchar2(3 ) NOT NULL
+)
+/
+
+-- Add keys for table Narodowosci
+
+ALTER TABLE "Narodowosci" ADD CONSTRAINT "PK_Narodowosci" PRIMARY KEY ("NarodowoscId")
+/
+
 
 -- Create foreign keys (relationships) section ------------------------------------------------- 
 
@@ -287,6 +301,22 @@ ALTER TABLE "Turnieje" ADD CONSTRAINT "wygrywa" FOREIGN KEY ("DruzynaId") REFERE
 
 
 ALTER TABLE "Zaklady" ADD CONSTRAINT "obstawia w ramach" FOREIGN KEY ("TurniejId") REFERENCES "Turnieje" ("TurniejId")
+/
+
+
+ALTER TABLE "Trenerzy" ADD CONSTRAINT "pochodzi z" FOREIGN KEY ("Attribute1") REFERENCES "Narodowosci" ("NarodowoscId")
+/
+
+
+ALTER TABLE "Zawodnicy" ADD CONSTRAINT "pochodzi" FOREIGN KEY ("NarodowoscId") REFERENCES "Narodowosci" ("NarodowoscId")
+/
+
+
+ALTER TABLE "Sędziowie" ADD CONSTRAINT "pochodzi z kraju" FOREIGN KEY ("NarodowoscId") REFERENCES "Narodowosci" ("NarodowoscId")
+/
+
+
+ALTER TABLE "Drużyny" ADD CONSTRAINT "założona w" FOREIGN KEY ("NarodowoscId") REFERENCES "Narodowosci" ("NarodowoscId")
 /
 
 

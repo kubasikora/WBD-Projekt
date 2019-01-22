@@ -69,3 +69,6 @@ typings/
 *.synctex.gz
 *.lot
 *.lof
+
+#frontend files 
+/Frontend/node_modules/*

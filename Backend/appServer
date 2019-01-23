@@ -1,0 +1,46 @@
+from flask import Flask, Response
+import cx_Oracle
+import json
+
+app = Flask(__name__)
+
+
+@app.route('/')
+def hello_world():
+    con = cx_Oracle.connect("jsikora1", "jsikora1", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
+    print(con.version)
+    return 'Hello World!<br>connection version: <br>'+con.version
+
+
+@app.route('/incoming_matches')
+def show_incoming_matches():
+    sqlQuery = 'select * from "Mecze" where "WynikId" IS NULL order by "DataRozpoczecia" asc'
+    con = cx_Oracle.connect("jsikora1", "jsikora1", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
+    cur = con.cursor()
+    cur.execute(sqlQuery)
+
+    resp = cur.fetchmany(numRows=5)
+    print(resp)
+
+@app.route('/finished_matches')
+def show_finished_matches():
+    sqlQuery = 'select * from "Mecze" where "WynikId" IS NOT NULL order by "DataRozpoczecia" desc'
+    con = cx_Oracle.connect("jsikora1", "jsikora1", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
+    cur = con.cursor()
+    cur.execute('select * from "Narodowosci"')
+
+    resp = cur.fetchall()
+    return Response(json.dumps(resp), mimetype='application/json')
+
+@app.route('/sign_up')
+def signUpOperation():
+
+    con = cx_Oracle.connect('rwojtas/rwojtas/localhost/orcl')
+    cur = con.cursor()
+
+    rows = []
+
+
+
+if __name__ == '__main__':
+    app.run()

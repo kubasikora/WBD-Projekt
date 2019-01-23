@@ -1,5 +1,5 @@
 import {connect} from "react-redux";
-import BettingPageView from "./BettingPageView";
+import TournamentsPageView from "./TournamentsPageView";
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -16,4 +16,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(BettingPageView);
+)(TournamentsPageView);

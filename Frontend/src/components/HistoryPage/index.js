@@ -1,21 +1,19 @@
 import {connect} from "react-redux";
-import LoginPageView from "./LoginPageView";
-
-import login from "../../actions/login";
+import HistoryPageView from "./HistoryPageView";
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    loggedIn: state.auth.loggedIn
+    loggedIn: true
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    login: () => dispatch(login())
+
   };
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(LoginPageView);
+)(HistoryPageView);

@@ -4,6 +4,7 @@ import NavigationBarView from "./NavigationBarView";
 
 const mapStateToProps = (state, ownProps) => {
   return {
+    loggedIn: state.auth.loggedIn
   };
 };
 

@@ -3,7 +3,7 @@ import ScoretablePageView from "./ScoretablePageView";
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    loggedIn: true
+    fetching: false
   };
 };
 

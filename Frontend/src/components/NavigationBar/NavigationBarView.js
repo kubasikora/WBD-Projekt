@@ -42,7 +42,7 @@ export default class NavigationBarView extends React.Component {
         
         </AppBar>
         {value === 0 && <TabContainer><BettingPage /></TabContainer>}
-        {value === 0 && <TabContainer><TournamentsPage /></TabContainer>}
+        {value === 1 && <TabContainer><TournamentsPage /></TabContainer>}
         {value === 2 && <TabContainer><ScoretablePage /></TabContainer>}
         {value === 3 && <TabContainer><HistoryPage /></TabContainer>}
         </div> : 

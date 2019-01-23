@@ -3,7 +3,7 @@ import HistoryPageView from "./HistoryPageView";
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    loggedIn: true
+    fetching: false
   };
 };
 

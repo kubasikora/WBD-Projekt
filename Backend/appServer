@@ -102,7 +102,7 @@ def show_available_bets():
         cur = con.cursor()
 
         #cur.execute('select z."ZakladId", m."DruzynaGospodarzy", m."DruzynaGosci", extract(year from m."DataRozpoczecia"), extract(month from m."DataRozpoczecia"), extract(day from m."DataRozpoczecia"), t."Nazwa" from "Zaklady" z join "Mecze" m join "Druzyny" dh on dh."on m."MeczId"=z."MeczId" ''')
-        cur.execute('select  from "Mecze" where "WynikId" is null and "TurniejId" in (select "TurniejId" from "ZapisyUzytkownikow" where "UzytkownikId" = ' + user +')')
+        cur.execute('select "MeczId", extract(year from m."DataRozpoczecia"), extract(month from m."DataRozpoczecia"), extract(day from m."DataRozpoczecia"), dh."Nazwa", da."Nazwa" from "Mecze" m join "Druzyny" dh on m."DruzynaGospodarzyId"=dh."DruzynaId" join "Druzyny" da on m."DruzynaGosciId"=da."DruzynaId" where m."WynikId" IS NULL and m."TurniejId" in (select "TurniejId" from "ZapisyUzytkownikow" where "UzytkownikId"= ' + user + ')')
         resp = cur.fetchall()
 
     except ValueError:

@@ -100,17 +100,46 @@ def show_available_bets():
         user = request.args.get("UzytkownikId")
         con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
         cur = con.cursor()
+        final = []
 
         #cur.execute('select z."ZakladId", m."DruzynaGospodarzy", m."DruzynaGosci", extract(year from m."DataRozpoczecia"), extract(month from m."DataRozpoczecia"), extract(day from m."DataRozpoczecia"), t."Nazwa" from "Zaklady" z join "Mecze" m join "Druzyny" dh on dh."on m."MeczId"=z."MeczId" ''')
-        cur.execute('select "MeczId", extract(year from m."DataRozpoczecia"), extract(month from m."DataRozpoczecia"), extract(day from m."DataRozpoczecia"), dh."Nazwa", da."Nazwa" from "Mecze" m join "Druzyny" dh on m."DruzynaGospodarzyId"=dh."DruzynaId" join "Druzyny" da on m."DruzynaGosciId"=da."DruzynaId" where m."WynikId" IS NULL and m."TurniejId" in (select "TurniejId" from "ZapisyUzytkownikow" where "UzytkownikId"= ' + user + ')')
+        cur.execute('select "MeczId", extract(year from m."DataRozpoczecia"), extract(month from m."DataRozpoczecia"), extract(day from m."DataRozpoczecia"), dh."Nazwa", da."Nazwa", t."Nazwa" from "Mecze" m join "Druzyny" dh on m."DruzynaGospodarzyId"=dh."DruzynaId" join "Druzyny" da on m."DruzynaGosciId"=da."DruzynaId" join "Turnieje" t on t."TurniejId"=m."TurniejId" where m."WynikId" IS NULL and m."TurniejId" in (select "TurniejId" from "ZapisyUzytkownikow" where "UzytkownikId"= ' + user + ') order by t."Nazwa"')
         resp = cur.fetchall()
+        for row in resp:
+            final.append(row)
+            match = str(row[0])
+            cur.execute('select "ZakladId" from "Zaklady" where "MeczId"=' + str(match) + ' and "UzytkownikId"=' + str(user))
+            bet = cur.fetchone()
+            final.append(bet)
+
+    except ValueError:
+        final = {
+            "error": True,
+            "message": "Invalid arguments"
+        }
+    return Response(json.dumps(final), mimetype='application/json')
+
+@app.route('/add_bet')
+def add_or_update_bets():
+    try:
+        user = request.args.get("UzytkownikId")
+        score_h = request.args.get("WynikGosp")
+        score_h = request.args.get("WynikGosc")
+        match = request.args.get("MeczId")
+
+        con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
+        cur = con.cursor()
+
+        cur.execute('select * from "Zaklady" where "MeczId"='+ str(match) + ' and "UzytkownikId"=' + str(user))
+        checkBets = cur.fetchall()
+        print(checkBets.rowcount)
+
 
     except ValueError:
         resp = {
             "error": True,
             "message": "Invalid arguments"
         }
-    return Response(json.dumps(resp), mimetype='application/json')
 
 if __name__ == '__main__':
     app.run()

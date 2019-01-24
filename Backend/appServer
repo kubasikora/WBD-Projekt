@@ -85,13 +85,8 @@ def show_available_tournaments():
         con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
         cur = con.cursor()
 
-        cur.execute('select "TurniejId", "Nazwa", extract(year from "DataRozpoczecia"), extract(month from "DataRozpoczecia"), extract(day from "DataRozpoczecia") from "Turnieje" where "TurniejId"!=(select "TurniejId" from "ZapisyUzytkownikow" where "UzytkownikId"=' + str(user) + ')')
+        cur.execute('select "TurniejId", "Nazwa", extract(year from "DataRozpoczecia"), extract(month from "DataRozpoczecia"), extract(day from "DataRozpoczecia") from "Turnieje" where "TurniejId" not in (select "TurniejId" from "ZapisyUzytkownikow" where "UzytkownikId"=' + str(user) + ')')
         resp = cur.fetchall()
-        print(cur.rowcount)
-        if cur.rowcount == 0:
-            cur.execute('select "TurniejId", "Nazwa", extract(year from "DataRozpoczecia"), extract(month from "DataRozpoczecia"), extract(day from "DataRozpoczecia") from "Turnieje"')
-            resp = cur.fetchall()
-
     except ValueError:
         resp = {
             "error": True,
@@ -106,7 +101,10 @@ def show_available_bets():
         con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
         cur = con.cursor()
 
-        cur.execute('select * from ')
+        #cur.execute('select z."ZakladId", m."DruzynaGospodarzy", m."DruzynaGosci", extract(year from m."DataRozpoczecia"), extract(month from m."DataRozpoczecia"), extract(day from m."DataRozpoczecia"), t."Nazwa" from "Zaklady" z join "Mecze" m join "Druzyny" dh on dh."on m."MeczId"=z."MeczId" ''')
+        cur.execute('select  from "Mecze" where "WynikId" is null and "TurniejId" in (select "TurniejId" from "ZapisyUzytkownikow" where "UzytkownikId" = ' + user +')')
+        resp = cur.fetchall()
+
     except ValueError:
         resp = {
             "error": True,

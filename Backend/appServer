@@ -93,7 +93,7 @@ def sign_up_for_tournament():
 @app.route('/tournament_list')
 def show_available_tournaments():
     try:
-        user = '1'
+        user = request.args.get("UzytkownikId")
 
         con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
         cur = con.cursor()

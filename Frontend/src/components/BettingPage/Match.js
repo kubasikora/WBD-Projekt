@@ -68,7 +68,7 @@ class Match extends React.Component {
                             variant="contained" 
                             color="primary" 
                             style={{ 
-                                width: "250px", 
+                                width: "200px", 
                                 height: "40px", 
                                 backgroundColor: "rgb(6,17,90)",
                                 margin: "5px"  
@@ -80,7 +80,7 @@ class Match extends React.Component {
                             variant="contained" 
                             color="primary" 
                             style={{ 
-                                width: "250px", 
+                                width: "200px", 
                                 height: "40px", 
                                 color: "rgb(6,17,90)",
                                 backgroundColor: "white",
@@ -88,6 +88,17 @@ class Match extends React.Component {
                             }} 
                             onClick={this.getMoreInfo}>
                                 Szczegóły spotkania
+                            </Button>
+                            <Button 
+                            variant="contained" 
+                            color="secondary" 
+                            style={{ 
+                                width: "200px", 
+                                height: "40px", 
+                                margin: "5px"     
+                            }} 
+                            onClick={this.getMoreInfo}>
+                                Usuń zakład
                             </Button>
                         </Grid>
                     </Grid>

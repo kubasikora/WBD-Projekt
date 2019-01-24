@@ -6,18 +6,18 @@ import json
 
 app = Flask(__name__)
 CORS(app)
-
+usr_pass = "jsikora1"
 
 @app.route('/')
 def hello_world():
-    con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
+    con = cx_Oracle.connect(usr_pass, usr_pass, cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
     print(con.version)
     return 'Hello World!<br>connection version: <br>' + con.version
 
 
 @app.route('/incoming_matches')
 def show_incoming_matches():
-    con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
+    con = cx_Oracle.connect(usr_pass, usr_pass, cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
     cur = con.cursor()
     cur.execute(
         'select "MeczId", extract(year from m."DataRozpoczecia"), extract(month from m."DataRozpoczecia"), extract(day from m."DataRozpoczecia"), dh."Nazwa", da."Nazwa", st."Nazwa", ref."Imie", ref."Nazwisko", t."Nazwa", w."WynikGospodarzy", w."WynikGosci"  from "Mecze" m join "Druzyny" dh on dh."DruzynaId"=m."DruzynaGospodarzyId" join "Druzyny" da on da."DruzynaId"= m."DruzynaGosciId" join "Stadiony" st on st."StadionId" = m."StadionId" join "Sedziowie" ref on ref."SedziaId" = m."SedziaId" join "Turnieje" t on t."TurniejId" = m."TurniejId" join "Wyniki" w on w."WynikId" = m."WynikId" where m."WynikId" IS NULL')
@@ -28,9 +28,7 @@ def show_incoming_matches():
 
 @app.route('/finished_matches')
 def show_finished_matches():
-    # sqlQuery = 'select * from "Mecze" m join "Druzyny" dh on dh."DruzynaId"=m."DruzynaGospodarzyId" join "Druzyny" da on da."DruzynaId"= m."DruzynaGosciId" join "Stadiony" s on s."StadionId" = m."StadionId" join "Sedziowie" ref on ref."SedziaId" = m."SedziaId" join "Turnieje" t on t."TurniejId" = m."TurniejId" join "Wyniki" w on w."WynikId" = m."WynikId" where m."WynikId" IS NOT NULL;'
-
-    con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
+    con = cx_Oracle.connect(usr_pass, usr_pass, cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
     cur = con.cursor()
     cur.execute('select "MeczId", extract(year from m."DataRozpoczecia"), extract(month from m."DataRozpoczecia"), extract(day from m."DataRozpoczecia"), dh."Nazwa", da."Nazwa", st."Nazwa", ref."Imie", ref."Nazwisko", t."Nazwa", w."WynikGospodarzy", w."WynikGosci"  from "Mecze" m join "Druzyny" dh on dh."DruzynaId"=m."DruzynaGospodarzyId" join "Druzyny" da on da."DruzynaId"= m."DruzynaGosciId" join "Stadiony" st on st."StadionId" = m."StadionId" join "Sedziowie" ref on ref."SedziaId" = m."SedziaId" join "Turnieje" t on t."TurniejId" = m."TurniejId" join "Wyniki" w on w."WynikId" = m."WynikId" where m."WynikId" IS NOT NULL')
 
@@ -51,7 +49,7 @@ def sign_in_operation():
             "message": "Invalid arguments"
         }
 
-    con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
+    con = cx_Oracle.connect(usr_pass, usr_pass, cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
     cur = con.cursor()
 
     cur.execute('select "UzytkownikId", "Login", "Imie", "Nazwisko" from "Uzytkownicy" where "Login"=' + "'" + login + "'" + ' and "Haslo"=' + "'" + password + "'")
@@ -64,7 +62,7 @@ def sign_up_for_tournament():
     try:
         tournament = int(request.args.get("TurniejId"))
         user = int(request.args.get("UzytkownikId"))
-        con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
+        con = cx_Oracle.connect(usr_pass, usr_pass, cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
         cur = con.cursor()
 
         statement = 'insert into "ZapisyUzytkownikow"("UzytkownikId", "TurniejId") values (:1, :2)'
@@ -83,7 +81,7 @@ def show_available_tournaments():
     try:
         user = request.args.get("UzytkownikId")
 
-        con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
+        con = cx_Oracle.connect(usr_pass, usr_pass, cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
         cur = con.cursor()
 
         cur.execute('select "TurniejId", "Nazwa", extract(year from "DataRozpoczecia"), extract(month from "DataRozpoczecia"), extract(day from "DataRozpoczecia") from "Turnieje" where "TurniejId" not in (select "TurniejId" from "ZapisyUzytkownikow" where "UzytkownikId"=' + str(user) + ')')
@@ -99,7 +97,7 @@ def show_available_tournaments():
 def show_available_bets():
     try:
         user = '1' #request.args.get("UzytkownikId")
-        con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
+        con = cx_Oracle.connect(usr_pass, usr_pass, cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
         cur = con.cursor()
         final = []
 
@@ -124,22 +122,24 @@ def show_available_bets():
 def add_or_update_bets():
     try:
         resp = 'ok'
-        user = '1' #request.args.get("UzytkownikId")
-        score_h = '4' #request.args.get("WynikGosp")
-        score_a = '0' #request.args.get("WynikGosc")
-        match = '3' #request.args.get("MeczId")
+        user = 1 #request.args.get("UzytkownikId")
+        score_h = 4 #request.args.get("WynikGosp")
+        score_a = 0 #request.args.get("WynikGosc")
+        match = 1 #request.args.get("MeczId")
 
-        con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
-        con.autocommit
+        con = cx_Oracle.connect(usr_pass, usr_pass, cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
         cur = con.cursor()
-
+        cur2 = con.cursor()
         cur.execute('select * from "Zaklady" where "MeczId"='+ str(match) + ' and "UzytkownikId"=' + str(user))
         checkBets = cur.fetchall()
+        print(checkBets)
         print(cur.rowcount)
         if cur.rowcount == 0:
             statement = 'insert into "Zaklady" values (:1, :2, :3, :4, :5, :6, :7)'
-            cur.execute()
-            #cur.execute(statement, ('(select nvl(max("ZakladId")+1,1) from "Zaklady")', score_h, score_a, , match, user, 'null'))
+            cur.execute('select nvl(max("ZakladId")+1,1) from "Zaklady"')
+            bet_id = cur.fetchone()
+            print(bet_id[0])
+            cur2.execute(statement, (str(bet_id[0]), str(score_h), str(score_a), 'NULL', str(match), str(user), 'NULL')) # "TO_DATE(, 'yyyy/mm/dd')"
     except ValueError:
         resp = {
             "error": True,

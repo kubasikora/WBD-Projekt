@@ -14,7 +14,7 @@ class HeaderView extends React.Component {
           <Grid item xs={2}>
             <Tooltip title="Wyloguj" enterDelay={500} leaveDelay={200}>
               <h4 className="login-info logout-cursor" onClick={() => this.props.logout()}>
-                <Typography variant="h7" style={{color: "white"}}>Wyloguj</Typography> 
+                <Typography variant="h6" style={{color: "white"}}>Wyloguj</Typography> 
               </h4>
             </Tooltip>
           </Grid></Fragment> : (

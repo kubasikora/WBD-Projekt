@@ -3,7 +3,7 @@ import TournamentsPageView from "./TournamentsPageView";
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    loggedIn: true,
+    fetching: false
   };
 };
 

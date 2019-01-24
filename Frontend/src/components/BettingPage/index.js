@@ -3,7 +3,7 @@ import BettingPageView from "./BettingPageView";
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    loggedIn: true,
+    fetching: false
   };
 };
 

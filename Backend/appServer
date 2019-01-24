@@ -58,7 +58,7 @@ def sign_in_operation():
     resp = cur.fetchone()
     return Response(json.dumps(resp), mimetype='application/json')
 
-@app.route("/tournaments_sign_up")#, methods=['POST'])
+@app.route("/tournaments_sign_up")#, dsmethods=['POST'])
 def sign_up_for_tournament():
     try:
         tournament = int(request.args.get("TurniejId"))

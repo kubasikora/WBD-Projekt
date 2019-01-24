@@ -50,7 +50,7 @@ const auth = (state = initialState, action) => {
     case AUTH_ERROR:
       return {
         ...state,
-        loggedIn: true,
+        loggedIn: false,
         error: true
       }
 

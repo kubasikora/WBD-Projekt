@@ -10,8 +10,7 @@ class BettingPageView extends React.Component {
     this.props.fetchBettableMatches(Cookies.get("loggedIn"));
   }
 
-  render() {
-    console.log(this.props);
+  render() {  
     return (
       <div>
         {this.props.fetching ?

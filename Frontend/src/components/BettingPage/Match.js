@@ -32,12 +32,14 @@ class Match extends React.Component {
 
     render() {
         return (
-            <ExpansionPanel style={{ width: "100%", backgroundColor: "#EFEFEF" }}>
+            <ExpansionPanel style={{ width: "100%", backgroundColor: "rgb(153,153,0)", margin: "1px" }}>
                 <ExpansionPanelSummary>
-                    <Typography>{`${this.state.fixture.home} - ${this.state.fixture.away}`}</Typography>
+                    <Typography style={{color: "white"}}>{`${this.state.fixture.home} - ${this.state.fixture.away}`}</Typography>
                 </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
+                <ExpansionPanelDetails style={{ backgroundColor: "rgb(230,230,230)" }}>
                     <Grid container>
+                    <Grid item xs={12}>
+                    <div style={{height: "20px"}}/></Grid>
                         <Grid item xs={4}>
                             <Typography>
                                 Gospodarze

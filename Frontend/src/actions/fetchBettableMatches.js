@@ -22,16 +22,16 @@ const fetchBettableMatches = (userId) => {
                         day: match[3],
                         home: match[4],
                         away: match[5],
-                        bet: bet
+                        bet: bet,
+                        tournament: match[6]
                     }
 
                     let tournament = match[6];
-
-                    console.log(`match: ${JSON.stringify(match)} + bet: ${JSON.stringify(bet)}`)
+                    
                     if (!result.hasOwnProperty(tournament)){
                         result[tournament] = [];
                     }
-                    result[tournament].push(match);
+                    result[tournament].push(matchObject);
                 }
                 
                 dispatch({ 

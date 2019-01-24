@@ -8,15 +8,17 @@ import Match from './Match';
 import NoMatchesAvailableInfo from './NoMatchesAvailableInfo';
 
 const Tournament = (props) => {
-    console.log(props);
     return (
-        <ExpansionPanel>
+        <ExpansionPanel style={{backgroundColor: "rgb(6,17,90)", margin: "1px"}}>
             <ExpansionPanelSummary>
-                <Typography>{props.tournamentInfo[0][6]}</Typography>
+                <Typography style={{color: "white"}}>{props.tournamentInfo[0].tournament}</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
                 <Grid container>
-                    <Match home={1} away={3} fixture={{"home": "Arka Gdynia", "away": "Legia Warszawa"}}/>
+                    {props.tournamentInfo.map(el => 
+                    <Grid item xs={12}>
+                        <Match home={el.bet ? el.bet[1] : 0} away={el.bet ? el.bet[2] : 0} fixture={{"home": el.home, "away": el.away}}/>
+                    </Grid>)}
                 </Grid>
             </ExpansionPanelDetails>
         </ExpansionPanel>

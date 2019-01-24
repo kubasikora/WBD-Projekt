@@ -60,7 +60,7 @@ def sign_in_operation():
 
 @app.route("/tournaments")#, methods=['POST'])
 def sign_up_for_tournament():
-    '''if request.method == 'POST':
+    '''if request.method == 'POST'
         try:
             #tournament = int(request.args.get("TurniejId"))
             #user = int(request.args.get("UzytkownikId"))

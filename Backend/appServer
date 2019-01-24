@@ -1,4 +1,4 @@
-from flask import Flask, Response
+from flask import Flask, Response, request
 from flask_cors import CORS
 import cx_Oracle
 import json
@@ -11,39 +11,53 @@ CORS(app)
 def hello_world():
     con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
     print(con.version)
-    return 'Hello World!<br>connection version: <br>'+con.version
+    return 'Hello World!<br>connection version: <br>' + con.version
 
 
 @app.route('/incoming_matches')
 def show_incoming_matches():
-    sqlQuery = 'select * from "Mecze" where "WynikId" IS NULL order by "DataRozpoczecia" asc'
     con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
     cur = con.cursor()
-    cur.execute('select * from "Narodowosci"')
+    cur.execute(
+        'select "MeczId", extract(year from m."DataRozpoczecia"), extract(month from m."DataRozpoczecia"), extract(day from m."DataRozpoczecia"), dh."Nazwa", da."Nazwa", st."Nazwa", ref."Imie", ref."Nazwisko", t."Nazwa", w."WynikGospodarzy", w."WynikGosci"  from "Mecze" m join "Druzyny" dh on dh."DruzynaId"=m."DruzynaGospodarzyId" join "Druzyny" da on da."DruzynaId"= m."DruzynaGosciId" join "Stadiony" st on st."StadionId" = m."StadionId" join "Sedziowie" ref on ref."SedziaId" = m."SedziaId" join "Turnieje" t on t."TurniejId" = m."TurniejId" join "Wyniki" w on w."WynikId" = m."WynikId" where m."WynikId" IS NULL')
 
-    resp = cur.fetchmany(numRows=5)
+    resp = cur.fetchmany(numRows=10)
     return Response(json.dumps(resp), mimetype='application/json')
+
 
 @app.route('/finished_matches')
 def show_finished_matches():
-    sqlQuery = 'select * from "Mecze" m join "Druzyny" dh on dh."DruzynaId"=m."DruzynaGospodarzyId" join "Druzyny" da on da."DruzynaId"= m."DruzynaGosciId" join "Stadiony" s on s."StadionId" = m."StadionId" join "Sedziowie" ref on ref."SedziaId" = m."SedziaId" join "Turnieje" t on t."TurniejId" = m."TurniejId" join "Wyniki" w on w."WynikId" = m."WynikId" where m."WynikId" IS NOT NULL;'
+    # sqlQuery = 'select * from "Mecze" m join "Druzyny" dh on dh."DruzynaId"=m."DruzynaGospodarzyId" join "Druzyny" da on da."DruzynaId"= m."DruzynaGosciId" join "Stadiony" s on s."StadionId" = m."StadionId" join "Sedziowie" ref on ref."SedziaId" = m."SedziaId" join "Turnieje" t on t."TurniejId" = m."TurniejId" join "Wyniki" w on w."WynikId" = m."WynikId" where m."WynikId" IS NOT NULL;'
 
-    print("")
     con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
     cur = con.cursor()
     cur.execute('select "MeczId", extract(year from m."DataRozpoczecia"), extract(month from m."DataRozpoczecia"), extract(day from m."DataRozpoczecia"), dh."Nazwa", da."Nazwa", st."Nazwa", ref."Imie", ref."Nazwisko", t."Nazwa", w."WynikGospodarzy", w."WynikGosci"  from "Mecze" m join "Druzyny" dh on dh."DruzynaId"=m."DruzynaGospodarzyId" join "Druzyny" da on da."DruzynaId"= m."DruzynaGosciId" join "Stadiony" st on st."StadionId" = m."StadionId" join "Sedziowie" ref on ref."SedziaId" = m."SedziaId" join "Turnieje" t on t."TurniejId" = m."TurniejId" join "Wyniki" w on w."WynikId" = m."WynikId" where m."WynikId" IS NOT NULL')
 
-    resp = cur.fetchmany(numRows=5)
-    print(resp)
-    #resp = str(resp[0])
-    #print(resp[0:9])
+    resp = cur.fetchmany(numRows=10)
     return Response(json.dumps(resp), mimetype='application/json')
 
-@app.route('/sign_up')
-def signUpOperation():
-    con = cx_Oracle.connect('rwojtas/rwojtas/localhost/orcl')
+
+@app.route('/sign_in')
+def sign_in_operation():
+    login = "robart"
+    password = "robar123"
+    '''try:
+        login = request.args.get("login")
+        password = request.args.get("password")
+    except ValueError:
+        resp = {
+            "error": True,
+            "message": "Invalid arguments"
+        }'''
+
+    con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
     cur = con.cursor()
-    rows = []
+
+    cur.execute('select "UzytkownikId", "Login", "Imie", "Nazwisko" from "Uzytkownicy" where "Login"=' + "'" + login + "'" + ' and "Haslo"=' + "'" + password + "'")
+
+    resp = cur.fetchone()
+    return Response(json.dumps(resp), mimetype='application/json')
+
 
 if __name__ == '__main__':
     app.run()

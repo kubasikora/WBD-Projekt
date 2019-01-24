@@ -72,7 +72,7 @@ def sign_up_for_tournament():
 
             resp = cur.execute('insert into "ZapisyUzytkownikow" values(' + str(user) + ', ' + str(tournament) + ')')
 
-        except ValueError:
+        except ValueError:a
             resp = {
                 "error": True,
                 "message": "Invalid arguments"

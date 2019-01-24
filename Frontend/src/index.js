@@ -10,8 +10,12 @@ import thunk from "redux-thunk";
 import App from './App';
 import "./App.css";
 import * as serviceWorker from './serviceWorker';
+import Cookies from "js-cookie";
 
 const store = createStore(rootReducer, applyMiddleware(thunk, createLogger()));
+if(Cookies.get("loggedIn")){
+    store.dispatch({type: "LOGIN"});
+}
 
 ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
 

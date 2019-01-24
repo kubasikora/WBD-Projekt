@@ -5,7 +5,7 @@ import login from "../../actions/login";
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    loggedIn: state.auth.loggedIn
+    fetching: state.auth.fetching
   };
 };
 

@@ -8,14 +8,15 @@ import Match from './Match';
 import NoMatchesAvailableInfo from './NoMatchesAvailableInfo';
 
 const Tournament = (props) => {
+    console.log(props);
     return (
         <ExpansionPanel>
             <ExpansionPanelSummary>
-                <Typography>Ekstraklasa</Typography>
+                <Typography>{props.tournamentInfo[0][6]}</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
                 <Grid container>
-                <Match home={1} away={3} fixture={{"home": "Arka Gdynia", "away": "Legia Warszawa"}}/>
+                    <Match home={1} away={3} fixture={{"home": "Arka Gdynia", "away": "Legia Warszawa"}}/>
                 </Grid>
             </ExpansionPanelDetails>
         </ExpansionPanel>

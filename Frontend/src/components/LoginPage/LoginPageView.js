@@ -1,5 +1,6 @@
 import React from 'react';
 import { Paper, TextField, Typography, Button } from '@material-ui/core';
+import auth from "../../actions/auth";
 
 class LoginPage extends React.Component {
     constructor(props) {
@@ -10,7 +11,7 @@ class LoginPage extends React.Component {
     onClick(){
         const login = document.getElementById("login").value;
         const password = document.getElementById("password").value;
-        this.props.login();
+        this.props.login(login, password);
     }   
 
     render() {

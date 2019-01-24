@@ -1,7 +1,8 @@
 import {connect} from "react-redux";
 import LoginPageView from "./LoginPageView";
 
-import login from "../../actions/login";
+import auth from "../../actions/auth";
+
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -11,7 +12,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    login: () => dispatch(login())
+    login: (login, password) => dispatch(auth(login, password))
   };
 };
 

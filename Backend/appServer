@@ -85,12 +85,12 @@ def show_available_tournaments():
         con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
         cur = con.cursor()
 
-        cur.execute('select "TurniejId", "Nazwa", extract(year from "DataRozpoczecia"), extract(month from "DataRozpoczecia"), extract(day from "DataRozpoczecia") from "Turnieje" where "TurniejId"!=(select "TurniejId" from "ZapisyUzytkownikow" where "UzytkownikId"=' + str(user) + ')')
+        cur.execute('select "TurniejId", "Nazwa", extract(year from "DataRozpoczecia"), extract(month from "DataRozpoczecia"), extract(day from "DataRozpoczecia") from "Turnieje" where "TurniejId" NOT IN (select "TurniejId" from "ZapisyUzytkownikow" where "UzytkownikId"=' + str(user) + ')')
         resp = cur.fetchall()
         print(cur.rowcount)
-        if cur.rowcount == 0:
-            cur.execute('select "TurniejId", "Nazwa", extract(year from "DataRozpoczecia"), extract(month from "DataRozpoczecia"), extract(day from "DataRozpoczecia") from "Turnieje"')
-            resp = cur.fetchall()
+        #if cur.rowcount == 0:
+            #cur.execute('select "TurniejId", "Nazwa", extract(year from "DataRozpoczecia"), extract(month from "DataRozpoczecia"), extract(day from "DataRozpoczecia") from "Turnieje"')
+            #resp = cur.fetchall()
 
     except ValueError:
         resp = {

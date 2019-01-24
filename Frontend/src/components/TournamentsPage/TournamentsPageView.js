@@ -13,6 +13,10 @@ class TournamentsPageView extends React.Component {
     this.signUp = this.signUp.bind(this);
   }
 
+  componentDidMount(){
+    this.props.fetchSignupableTournaments(Cookies.get("loggedIn"));
+  }
+
   signUp(tournamentId) {
     this.props.signUpForTournament(Cookies.get("loggedIn"), tournamentId);
   }
@@ -23,14 +27,15 @@ class TournamentsPageView extends React.Component {
         <Paper style={{ height: "65vh", marginTop: "10px" }}>
           {this.props.fetching ? (<div> <div style={{ height: "25vh" }}> </div><Loading /></div>) :
             <Grid container>
-              <Grid item xs={12} style={{ height: "30px" }} />
+              <Grid item xs={12} style={{ height: "20px" }} />
               <Grid item xs={12}>
-                <div style={{ marginLeft: "10px" }}>
+                <div style={{ marginLeft: "20px" }}>
                   <Typography variant="h5" align="left">
                     Turnieje na które możesz się zapisać:
                 </Typography>
                 </div>
               </Grid>
+              <Grid item xs={12} style={{ height: "20px" }} />
               {this.props.fetching ?
                 <div>
                   <div style={{ height: "17vh" }} />
@@ -39,7 +44,7 @@ class TournamentsPageView extends React.Component {
                 <Fragment>
                   {this.props.data.length == 0 ?
                     <NoTournamentsAvailableToEnrollInfo />
-                    : <Grid container>
+                    : <Grid container style={{overflow : "scroll", maxHeight: "57vh"}}>
                       {this.props.data.map(el => <Grid item xs={12}><SignupableTournament signUp={this.signUp} tournamentInfo={el} /></Grid>)}
                     </Grid>}
                 </Fragment>}

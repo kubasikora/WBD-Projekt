@@ -1,6 +1,7 @@
 import {connect} from "react-redux";
 import TournamentsPageView from "./TournamentsPageView";
 import signUpForTournament from "../../actions/signUpForTournament";
+import fetchSignupableTournaments from "../../actions/fetchSignupableTournaments";
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -12,7 +13,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    signUpForTournament: (userId, tournamentId) => dispatch(signUpForTournament(userId, tournamentId))
+    signUpForTournament: (userId, tournamentId) => dispatch(signUpForTournament(tournamentId, userId)),
+    fetchSignupableTournaments: (userId) => dispatch(fetchSignupableTournaments(userId))
   };
 };
 

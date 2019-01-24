@@ -1,8 +1,10 @@
 from flask import Flask, Response
+from flask_cors import CORS
 import cx_Oracle
 import json
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route('/')
@@ -31,7 +33,7 @@ def show_finished_matches():
     cur = con.cursor()
     cur.execute('select "MeczId", extract(year from m."DataRozpoczecia"), extract(month from m."DataRozpoczecia"), extract(day from m."DataRozpoczecia"), dh."Nazwa", da."Nazwa", st."Nazwa", ref."Imie", ref."Nazwisko", t."Nazwa", w."WynikGospodarzy", w."WynikGosci"  from "Mecze" m join "Druzyny" dh on dh."DruzynaId"=m."DruzynaGospodarzyId" join "Druzyny" da on da."DruzynaId"= m."DruzynaGosciId" join "Stadiony" st on st."StadionId" = m."StadionId" join "Sedziowie" ref on ref."SedziaId" = m."SedziaId" join "Turnieje" t on t."TurniejId" = m."TurniejId" join "Wyniki" w on w."WynikId" = m."WynikId" where m."WynikId" IS NOT NULL')
 
-    resp = cur.fetchone()
+    resp = cur.fetchmany(numRows=5)
     print(resp)
     #resp = str(resp[0])
     #print(resp[0:9])

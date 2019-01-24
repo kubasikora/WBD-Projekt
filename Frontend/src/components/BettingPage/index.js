@@ -1,15 +1,17 @@
 import {connect} from "react-redux";
 import BettingPageView from "./BettingPageView";
+import fetchBettableMatches from "../../actions/fetchBettableMatches";
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    fetching: false
+    fetching: state.bets.fetching,
+    data: state.bets.data
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-
+    fetchBettableMatches: (userId) => dispatch(fetchBettableMatches(userId))
   };
 };
 

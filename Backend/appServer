@@ -123,8 +123,8 @@ def add_or_update_bets():
     try:
         resp = 'ok'
         user = 1 #request.args.get("UzytkownikId")
-        score_h = 4 #request.args.get("WynikGosp")
-        score_a = 0 #request.args.get("WynikGosc")
+        score_h = 3 #request.args.get("WynikGosp")
+        score_a = 3 #request.args.get("WynikGosc")
         match = 1 #request.args.get("MeczId")
 
         con = cx_Oracle.connect(usr_pass, usr_pass, cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
@@ -135,16 +135,21 @@ def add_or_update_bets():
         print(checkBets)
         print(cur.rowcount)
         if cur.rowcount == 0:
-            statement = 'insert into "Zaklady" values (:1, :2, :3, :4, :5, :6, :7)'
+            statement = 'insert into "Zaklady"("ZakladId", "WynikGospodarzy", "WynikGosci", "MeczId", "UzytkownikId") values (:1, :2, :3, :5, :6)'
             cur.execute('select nvl(max("ZakladId")+1,1) from "Zaklady"')
             bet_id = cur.fetchone()
             print(bet_id[0])
-            cur2.execute(statement, (str(bet_id[0]), str(score_h), str(score_a), 'NULL', str(match), str(user), 'NULL')) # "TO_DATE(, 'yyyy/mm/dd')"
+            cur.execute(statement, (str(bet_id[0]), str(score_h), str(score_a), str(match), str(user))) # "TO_DATE(, 'yyyy/mm/dd')"
+        else:
+            statement = 'update "Zaklady" set "WynikGospodarzy"=' + str(score_h) + ', "WynikGosci"=' + str(score_a) + ' where "UzytkownikId"=' + str(user) + ' and "MeczId"=' + str(match)
+            cur.execute(statement)
+        con.commit()
     except ValueError:
         resp = {
             "error": True,
             "message": "Invalid arguments"
         }
+
     return Response(json.dumps(resp), mimetype='application/json')
 
 if __name__ == '__main__':

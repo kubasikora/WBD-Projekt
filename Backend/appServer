@@ -39,22 +39,56 @@ def show_finished_matches():
 
 @app.route('/sign_in')
 def sign_in_operation():
-
+    #ogin = "robart"
+    #password = "robar123"
     try:
-        login = str(request.args.get("login"))
-        password = str(request.args.get("password"))
-        con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
-        cur = con.cursor()
-        cur.execute('select "UzytkownikId", "Login", "Imie", "Nazwisko" from "Uzytkownicy" where "Login"=' + "'" + login + "'" + ' and "Haslo"=' + "'" + password + "'")
-        resp = cur.fetchone()
-
+        login = request.args.get("login")
+        password = request.args.get("password")
     except ValueError:
         resp = {
             "error": True,
+            "message": "Invalid arguments"
         }
 
+    con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
+    cur = con.cursor()
+
+    cur.execute('select "UzytkownikId", "Login", "Imie", "Nazwisko" from "Uzytkownicy" where "Login"=' + "'" + login + "'" + ' and "Haslo"=' + "'" + password + "'")
+
+    resp = cur.fetchone()
     return Response(json.dumps(resp), mimetype='application/json')
 
+@app.route("/tournaments")#, methods=['POST'])
+def sign_up_for_tournament():
+    '''if request.method == 'POST':
+        try:
+            #tournament = int(request.args.get("TurniejId"))
+            #user = int(request.args.get("UzytkownikId"))
+
+
+
+            con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
+            cur = con.cursor()
+
+            resp = cur.execute('insert into "ZapisyUzytkownikow" values(' + str(user) + ', ' + str(tournament) + ')')
+
+        except ValueError:
+            resp = {
+                "error": True,
+                "message": "Invalid arguments"
+            }'''
+    tournament = 1
+    user = 1
+
+    insert = [(user, tournament)]
+
+    con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
+    cur = con.cursor()
+
+    statement = 'insert into "ZapisyUzytkownikow"("UzytkownikId", "TurniejId") values (:1, :2)'
+    cur.execute(statement, (str(user), str(tournament)))
+    con.commit()
+    return Response(json.dumps('ok'), mimetype='application/json')
 
 if __name__ == '__main__':
     app.run()

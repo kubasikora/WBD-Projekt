@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    con = cx_Oracle.connect("jsikora1", "jsikora1", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
+    con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
     print(con.version)
     return 'Hello World!<br>connection version: <br>'+con.version
 
@@ -15,32 +15,33 @@ def hello_world():
 @app.route('/incoming_matches')
 def show_incoming_matches():
     sqlQuery = 'select * from "Mecze" where "WynikId" IS NULL order by "DataRozpoczecia" asc'
-    con = cx_Oracle.connect("jsikora1", "jsikora1", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
-    cur = con.cursor()
-    cur.execute(sqlQuery)
-
-    resp = cur.fetchmany(numRows=5)
-    print(resp)
-
-@app.route('/finished_matches')
-def show_finished_matches():
-    sqlQuery = 'select * from "Mecze" where "WynikId" IS NOT NULL order by "DataRozpoczecia" desc'
-    con = cx_Oracle.connect("jsikora1", "jsikora1", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
+    con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
     cur = con.cursor()
     cur.execute('select * from "Narodowosci"')
 
-    resp = cur.fetchall()
+    resp = cur.fetchmany(numRows=5)
+    return Response(json.dumps(resp), mimetype='application/json')
+
+@app.route('/finished_matches')
+def show_finished_matches():
+    sqlQuery = 'select * from "Mecze" m join "Druzyny" dh on dh."DruzynaId"=m."DruzynaGospodarzyId" join "Druzyny" da on da."DruzynaId"= m."DruzynaGosciId" join "Stadiony" s on s."StadionId" = m."StadionId" join "Sedziowie" ref on ref."SedziaId" = m."SedziaId" join "Turnieje" t on t."TurniejId" = m."TurniejId" join "Wyniki" w on w."WynikId" = m."WynikId" where m."WynikId" IS NOT NULL;'
+
+    print("")
+    con = cx_Oracle.connect("rwojtas", "rwojtas", cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
+    cur = con.cursor()
+    cur.execute('select "MeczId", extract(year from m."DataRozpoczecia"), extract(month from m."DataRozpoczecia"), extract(day from m."DataRozpoczecia"), dh."Nazwa", da."Nazwa", st."Nazwa", ref."Imie", ref."Nazwisko", t."Nazwa", w."WynikGospodarzy", w."WynikGosci"  from "Mecze" m join "Druzyny" dh on dh."DruzynaId"=m."DruzynaGospodarzyId" join "Druzyny" da on da."DruzynaId"= m."DruzynaGosciId" join "Stadiony" st on st."StadionId" = m."StadionId" join "Sedziowie" ref on ref."SedziaId" = m."SedziaId" join "Turnieje" t on t."TurniejId" = m."TurniejId" join "Wyniki" w on w."WynikId" = m."WynikId" where m."WynikId" IS NOT NULL')
+
+    resp = cur.fetchone()
+    print(resp)
+    #resp = str(resp[0])
+    #print(resp[0:9])
     return Response(json.dumps(resp), mimetype='application/json')
 
 @app.route('/sign_up')
 def signUpOperation():
-
     con = cx_Oracle.connect('rwojtas/rwojtas/localhost/orcl')
     cur = con.cursor()
-
     rows = []
-
-
 
 if __name__ == '__main__':
     app.run()

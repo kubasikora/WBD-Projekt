@@ -138,7 +138,6 @@ def add_or_update_bets():
             statement = 'insert into "Zaklady"("ZakladId", "WynikGospodarzy", "WynikGosci", "MeczId", "UzytkownikId") values (:1, :2, :3, :5, :6)'
             cur.execute('select nvl(max("ZakladId")+1,1) from "Zaklady"')
             bet_id = cur.fetchone()
-            print(bet_id[0])
             cur.execute(statement, (str(bet_id[0]), str(score_h), str(score_a), str(match), str(user))) # "TO_DATE(, 'yyyy/mm/dd')"
         else:
             statement = 'update "Zaklady" set "WynikGospodarzy"=' + str(score_h) + ', "WynikGosci"=' + str(score_a) + ' where "UzytkownikId"=' + str(user) + ' and "MeczId"=' + str(match)
@@ -173,13 +172,39 @@ def delete_bet():
 @app.route('/show_details')
 def match_details():
     try:
-        match = 1 #request.args.get("MeczId")
+        match = request.args.get("MeczId")
 
         con = cx_Oracle.connect(usr_pass, usr_pass, cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
         cur = con.cursor()
 
         cur.execute('select "MeczId", extract(year from m."DataRozpoczecia"), extract(month from m."DataRozpoczecia"), extract(day from m."DataRozpoczecia"), dh."Nazwa", da."Nazwa", t."Nazwa", ref."Imie", ref."Nazwisko", stad."Nazwa", stad."Pojemnosc", stad."Miasto", stad."Adres" from "Mecze" m join "Druzyny" dh on m."DruzynaGospodarzyId"=dh."DruzynaId" join "Druzyny" da on m."DruzynaGosciId"=da."DruzynaId" join "Turnieje" t on t."TurniejId"=m."TurniejId" join "Stadiony" stad on stad."StadionId"=m."StadionId" join "Sedziowie" ref on ref."SedziaId"=m."SedziaId" where m."MeczId"=' + str(match))
         resp = cur.fetchone()
+    except ValueError:
+        resp = {
+            "error": True,
+            "message": "Invalid arguments"
+        }
+    return Response(json.dumps(resp), mimetype='application/json')
+
+@app.route('/bets_history')
+def show_history():
+    try:
+        user = 1 #request.args.get("UzytkownikId")
+        resp = []
+        con = cx_Oracle.connect(usr_pass, usr_pass, cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
+        cur = con.cursor()
+
+        cur.execute('select * from "Zaklady" where "UzytkownikId"=' + str(user))
+        bets = cur.fetchmany(numRows=10)
+
+        for bet in bets:
+            resp.append(bet)
+            match = bet[4]
+            print(bet[4])
+            cur.execute('select dh."Nazwa", da."Nazwa", w."WynikGospodarzy", w."WynikGosci" from "Mecze" m join "Druzyny" dh on m."DruzynaGospodarzyId"=dh."DruzynaId" join "Druzyny" da on m."DruzynaGosciId"=da."DruzynaId" join "Wyniki" w on w."WynikId"=m."WynikId" where m."MeczId"=' + str(match))
+            match = cur.fetchone()
+            resp.append(match)
+
     except ValueError:
         resp = {
             "error": True,

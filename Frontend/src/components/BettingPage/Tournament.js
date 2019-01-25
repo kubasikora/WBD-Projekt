@@ -17,7 +17,15 @@ const Tournament = (props) => {
                 <Grid container>
                     {props.tournamentInfo.map(el => 
                     <Grid item xs={12}>
-                        <Match home={el.bet ? el.bet[1] : 0} away={el.bet ? el.bet[2] : 0} fixture={{"home": el.home, "away": el.away}}/>
+                        <Match 
+                            postBet={props.postBet}
+                            matchId={el.matchId}
+                            betId={el.bet ? el.bet[0]: null}
+                            home={el.bet ? el.bet[1] : 0} 
+                            away={el.bet ? el.bet[2] : 0} 
+                            fixture={{"home": el.home, "away": el.away}}
+                            deleteBet={props.deleteBet}
+                            />
                     </Grid>)}
                 </Grid>
             </ExpansionPanelDetails>

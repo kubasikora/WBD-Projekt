@@ -22,8 +22,12 @@ class Match extends React.Component {
         });
     };
 
+    deleteBet = event => {
+        this.props.deleteBet(this.props.betId);
+    }
+
     putBet = event => {
-        alert(`Gospodarze ${this.state.homeGoals} : Goście ${this.state.awayGoals}`);
+        this.props.postBet(this.state.homeGoals, this.state.awayGoals, this.props.matchId);
     }
 
     getMoreInfo = event => {
@@ -32,7 +36,7 @@ class Match extends React.Component {
 
     render() {
         return (
-            <ExpansionPanel style={{ width: "100%", backgroundColor: "rgb(153,153,0)", margin: "1px" }}>
+            <ExpansionPanel style={{ width: "100%", backgroundColor: this.props.betId ? "rgb(100,100,100)" : "#285239", margin: "1px" }}>
                 <ExpansionPanelSummary>
                     <Typography style={{color: "white"}}>{`${this.state.fixture.home} - ${this.state.fixture.away}`}</Typography>
                 </ExpansionPanelSummary>
@@ -91,17 +95,32 @@ class Match extends React.Component {
                             onClick={this.getMoreInfo}>
                                 Szczegóły spotkania
                             </Button>
-                            <Button 
-                            variant="contained" 
-                            color="secondary" 
-                            style={{ 
-                                width: "200px", 
-                                height: "40px", 
-                                margin: "5px"     
-                            }} 
-                            onClick={this.getMoreInfo}>
-                                Usuń zakład
-                            </Button>
+                            {this.props.betId === null ? 
+                                <Button 
+                                variant="contained" 
+                                color="secondary" 
+                                disabled
+                                style={{ 
+                                    width: "200px", 
+                                    height: "40px", 
+                                    margin: "5px"     
+                                }} 
+                                onClick={this.getMoreInfo}>
+                                    Usuń zakład
+                                </Button>
+                                 : 
+                                <Button 
+                                variant="contained" 
+                                color="secondary" 
+                                style={{ 
+                                    width: "200px", 
+                                    height: "40px", 
+                                    margin: "5px"     
+                                }} 
+                                onClick={this.deleteBet}>
+                                    Usuń zakład
+                                </Button>
+                            }
                         </Grid>
                     </Grid>
                 </ExpansionPanelDetails>

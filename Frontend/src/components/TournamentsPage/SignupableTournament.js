@@ -4,7 +4,10 @@ import Grid from '@material-ui/core/Grid';
 import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Card, CardContent, Button } from "@material-ui/core";
 
 const SignupableTournament = (props) => {
-    console.log(JSON.stringify(props));
+    const pad = d => {
+        return (d < 10) ? '0' + d.toString() : d.toString();
+    }
+
     return (
         <Grid container >
             <Grid item xs={12} style={{margin: "1px 20px"}} >
@@ -16,7 +19,7 @@ const SignupableTournament = (props) => {
                         <Grid container>
                             <Grid item xs={10}>
                                 <div style={{height: "22px"}} />
-                                <Typography align="left" style={{color: "white"}}>{`Data rozpoczęcia: ${props.tournamentInfo.day}.${props.tournamentInfo.month}.${props.tournamentInfo.year}`}</Typography>
+                                <Typography align="left" style={{color: "white"}}>{`Data rozpoczęcia: ${pad(props.tournamentInfo.day)}.${pad(props.tournamentInfo.month)}.${props.tournamentInfo.year}`}</Typography>
                             </Grid>
                             <Grid item xs={2}>
                                 <div style={{height: "10px"}} />

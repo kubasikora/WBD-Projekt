@@ -9,6 +9,7 @@ class IncomingMatchesTableView extends React.Component {
     }
 
     render() {
+        console.log(this.props)
         return (
             <Paper style={{ height: "65vh", width: "95%" }}>
                 <div style={{ height: "10px" }} />

@@ -6,8 +6,17 @@ import Loading from "../Loading";
 import Cookies from "js-cookie";
 
 class BettingPageView extends React.Component {
+  constructor(props){
+    super(props);
+    this.postBet = this.postBet.bind(this);
+  }
+
   componentDidMount(){
     this.props.fetchBettableMatches(Cookies.get("loggedIn"));
+  }
+
+  postBet(home,away,match){
+    this.props.postBet(Cookies.get("loggedIn"), home, away, match);
   }
 
   render() {  
@@ -21,8 +30,15 @@ class BettingPageView extends React.Component {
                 <Fragment>
                   {this.props.data.length == 0 ?
                       <NoTournamentsAvailableInfo />
-                    : <Grid container style={{overflow : "scroll", maxHeight: "57vh"}}>
-                      {this.props.data.map(el => <Grid item xs={12}><Tournament tournamentInfo={el} /></Grid>)}
+                    : <Grid container style={{overflow : "scroll"}}>
+                      {this.props.data.map(el => 
+                      <Grid item xs={12}>
+                        <Tournament 
+                          tournamentInfo={el}   
+                          postBet={this.props.postBet}
+                          deleteBet={this.props.deleteBet}
+                        />
+                      </Grid>)}
                     </Grid>}
                 </Fragment>}
       </div>

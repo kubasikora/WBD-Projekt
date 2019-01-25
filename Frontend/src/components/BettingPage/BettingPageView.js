@@ -8,15 +8,10 @@ import Cookies from "js-cookie";
 class BettingPageView extends React.Component {
   constructor(props){
     super(props);
-    this.postBet = this.postBet.bind(this);
   }
 
   componentDidMount(){
     this.props.fetchBettableMatches(Cookies.get("loggedIn"));
-  }
-
-  postBet(home,away,match){
-    this.props.postBet(Cookies.get("loggedIn"), home, away, match);
   }
 
   render() {  

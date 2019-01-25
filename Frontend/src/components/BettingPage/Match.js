@@ -38,7 +38,7 @@ class Match extends React.Component {
         return (
             <ExpansionPanel style={{ width: "100%", backgroundColor: this.props.betId ? "rgb(100,100,100)" : "#285239", margin: "1px" }}>
                 <ExpansionPanelSummary>
-                    <Typography style={{color: "white"}}>{`${this.state.fixture.home} - ${this.state.fixture.away}`}</Typography>
+                    <Typography variant="h6" style={{color: "white"}}>{`${this.state.fixture.home} - ${this.state.fixture.away}`}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails style={{ backgroundColor: "rgb(230,230,230)" }}>
                     <Grid container>

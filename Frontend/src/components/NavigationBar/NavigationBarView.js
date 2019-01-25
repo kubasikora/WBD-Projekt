@@ -34,16 +34,17 @@ export default class NavigationBarView extends React.Component {
           <AppBar position="sticky" style={{backgroundColor: "rgb(6,17,90)"}}>
        
           <Tabs value={value} onChange={this.handleChange} fullWidth>
+            <Tab label="Wyniki" />
             <Tab label="Zakłady" />
             <Tab label="Turnieje" />
-            <Tab label="Wyniki" />
             <Tab label="Historia" />
           </Tabs>
         
         </AppBar>
-        {value === 0 && <TabContainer><BettingPage /></TabContainer>}
-        {value === 1 && <TabContainer><TournamentsPage /></TabContainer>}
-        {value === 2 && <TabContainer><ScoretablePage /></TabContainer>}
+        {value === 0 && <TabContainer><ResultsPage /></TabContainer>}
+        {value === 1 && <TabContainer><BettingPage /></TabContainer>}
+        {value === 2 && <TabContainer><TournamentsPage /></TabContainer>}
+        {/*value === 2 && <TabContainer><ScoretablePage /></TabContainer>*/}
         {value === 3 && <TabContainer><HistoryPage /></TabContainer>}
         </div> : 
         <div>

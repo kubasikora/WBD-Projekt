@@ -11,7 +11,7 @@ const Tournament = (props) => {
     return (
         <ExpansionPanel style={{backgroundColor: "rgb(6,17,90)", margin: "1px"}}>
             <ExpansionPanelSummary>
-                <Typography style={{color: "white"}}>{props.tournamentInfo[0].tournament}</Typography>
+                <Typography variant="h5" style={{color: "white"}}>{props.tournamentInfo[0].tournament}</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
                 <Grid container>

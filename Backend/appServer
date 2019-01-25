@@ -122,10 +122,10 @@ def show_available_bets():
 def add_or_update_bets():
     try:
         resp = 'ok'
-        user = 1 #request.args.get("UzytkownikId")
-        score_h = 3 #request.args.get("WynikGosp")
-        score_a = 0 #request.args.get("WynikGosc")
-        match = 1 #request.args.get("MeczId")
+        user = request.args.get("UzytkownikId")
+        score_h = request.args.get("WynikGosp")
+        score_a = request.args.get("WynikGosc")
+        match = request.args.get("MeczId")
 
         con = cx_Oracle.connect(usr_pass, usr_pass, cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
         cur = con.cursor()
@@ -163,6 +163,23 @@ def delete_bet():
         cur.execute('delete from "Zaklady" where "ZakladId"=' + str(bet))
         con.commit()
         resp = 'ok'
+    except ValueError:
+        resp = {
+            "error": True,
+            "message": "Invalid arguments"
+        }
+    return Response(json.dumps(resp), mimetype='application/json')
+
+@app.route('/show_details')
+def match_details():
+    try:
+        match = 1 #request.args.get("MeczId")
+
+        con = cx_Oracle.connect(usr_pass, usr_pass, cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
+        cur = con.cursor()
+
+        cur.execute('select "MeczId", extract(year from m."DataRozpoczecia"), extract(month from m."DataRozpoczecia"), extract(day from m."DataRozpoczecia"), dh."Nazwa", da."Nazwa", t."Nazwa", ref."Imie", ref."Nazwisko", stad."Nazwa", stad."Pojemnosc", stad."Miasto", stad."Adres" from "Mecze" m join "Druzyny" dh on m."DruzynaGospodarzyId"=dh."DruzynaId" join "Druzyny" da on m."DruzynaGosciId"=da."DruzynaId" join "Turnieje" t on t."TurniejId"=m."TurniejId" join "Stadiony" stad on stad."StadionId"=m."StadionId" join "Sedziowie" ref on ref."SedziaId"=m."SedziaId" where m."MeczId"=' + str(match))
+        resp = cur.fetchone()
     except ValueError:
         resp = {
             "error": True,

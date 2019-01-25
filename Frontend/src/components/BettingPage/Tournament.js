@@ -25,6 +25,7 @@ const Tournament = (props) => {
                             away={el.bet ? el.bet[2] : 0} 
                             fixture={{"home": el.home, "away": el.away}}
                             deleteBet={props.deleteBet}
+                            fetchDetails={props.fetchDetails}
                             />
                     </Grid>)}
                 </Grid>

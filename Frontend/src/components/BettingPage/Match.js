@@ -31,7 +31,7 @@ class Match extends React.Component {
     }
 
     getMoreInfo = event => {
-        alert("Informacja aktualnie niedostępna");
+        this.props.fetchDetails(this.props.matchId);
     }
 
     render() {

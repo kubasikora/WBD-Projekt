@@ -32,6 +32,7 @@ class BettingPageView extends React.Component {
                           tournamentInfo={el}   
                           postBet={this.props.postBet}
                           deleteBet={this.props.deleteBet}
+                          fetchDetails={this.props.fetchDetails}
                         />
                       </Grid>)}
                     </Grid>}

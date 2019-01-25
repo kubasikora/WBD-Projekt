@@ -12,6 +12,7 @@ class HistoryPageView extends React.Component {
   }
 
   render() {
+    console.log(this.props.data)
     return (
       <Fragment>
         {this.props.fetching ? <div> <div style={{ height: "25vh" }}> </div><Loading /></div> :
@@ -19,7 +20,7 @@ class HistoryPageView extends React.Component {
             this.props.data.length === 0 ? <Typography variant="h6">Brak wpisów w historii</Typography> :
             this.props.data.map(el => 
             <Grid item xs={12}>
-                <HistoryEntry />
+                <HistoryEntry history={el}/>
             </Grid>)
             }
           </div>

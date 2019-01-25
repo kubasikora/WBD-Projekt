@@ -21,7 +21,7 @@ class FinishedMatchesTableView extends React.Component {
                         <div style={{ height: "17vh" }} />
                         <Loading />
                     </div> :
-                    <div style={{ margin: "10px" }}>
+                    <div style={{ margin: "10px", maxHeight: "56vh", overflow: "scroll" }}>
                         {this.props.data.length == 0 ?
                             <Typography variant="h6" gutterBottom style={{ marginTop: "10px" }}>
                                 Brak spotkań

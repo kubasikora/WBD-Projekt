@@ -189,7 +189,7 @@ def match_details():
 @app.route('/bets_history')
 def show_history():
     try:
-        user = 1 #request.args.get("UzytkownikId")
+        user = request.args.get("UzytkownikId")
         resp = []
         con = cx_Oracle.connect(usr_pass, usr_pass, cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
         cur = con.cursor()

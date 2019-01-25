@@ -7,26 +7,41 @@ import {
 
 import endpoint from "../const/endpoint";
 
-const fetchHistory = () => {
+const fetchHistory = (userId) => {
     return dispatch => {
         dispatch({ type: FETCH_HISTORY_START });
-        axios.get(`${endpoint}/bets_history`, { crossdomain: true })
+        axios.get(`${endpoint}/bets_history?UzytkownikId=${userId}`, { crossdomain: true })
             .then(response => {
                 let result = []
-                response.data.forEach(el => {
+                for (let i = 0; i < response.data.length; i += 2) {
+                    let bet = response.data[i];
+                    let match = response.data[i+1];
+
                     let matchInfo = {
-                        matchId: el[0],
-                        year: el[1],
-                        month: el[2],
-                        day: el[3],
-                        home: el[4],
-                        away: el[5],
-                        stadium: el[6],
-                        ref: el[7] + " " + el[8],
-                        tournament: el[9],
+                        home: match[0],
+                        away: match[1],
                     }
-                    result.push(matchInfo);
-                });
+
+                    let betObject = {
+                        homeGoals: bet[1],
+                        awayGoals: bet[2]
+                    }
+                    
+                    let resultObject = {
+                        homeGoals: match[2],
+                        awayGoals: match[3]
+                    }
+
+                    let entryObject = {
+                        matchInfo,
+                        betObject,
+                        resultObject
+                    }
+
+                    result.push(entryObject);
+                }
+
+
                 dispatch({
                     type: FETCH_HISTORY_ACK,
                     payload: {

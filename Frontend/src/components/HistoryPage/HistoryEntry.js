@@ -4,31 +4,31 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 
-const HistoryEntry = props => {
+const HistoryEntry = (props) => {
     return (
-        <ExpansionPanel style={{backgroundColor: "rgb(230,230,230)"}}>
+        <ExpansionPanel style={{backgroundColor: "rgb(6,17,90)", margin: "2px"}}>
             <ExpansionPanelSummary>
-                <Typography>Gospodarze - Goście</Typography>
+                <Typography variant="h6" style={{color: "white"}}>{`${props.history.matchInfo.home} - ${props.history.matchInfo.away}`}</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
                 <Grid container>
                     <Grid item xs={6}>
-                        <Card style={{ margin: "1%", backgroundColor: "rbg(230,230,230)" }}>
+                        <Card style={{ margin: "1%", backgroundColor: "rbg(200,200,200)" }}>
                             <CardContent>
-                                {props.homeBet ?
-                                    (<span><Typography> Twój zakład </Typography>
-                                        <Typography> {`${props.homeBet} : ${props.awayBet}`} </Typography></span>) :
+                                {props.history.resultObject ?
+                                    (<span><Typography> Wynik spotkania </Typography>
+                                        <Typography> {`${props.history.resultObject.homeGoals} : ${props.history.resultObject.awayGoals}`} </Typography></span>) :
                                     (<span><Typography> Brak</Typography>
-                                        <Typography> zakładu </Typography></span>)
+                                        <Typography> wyniku </Typography></span>)
                                 }
                             </CardContent>
                         </Card>
                     </Grid>
                     <Grid item xs={6}>
-                        <Card style={{ margin: "1%", backgroundColor: "rbg(230,230,230)" }}>
+                        <Card style={{ margin: "1%", backgroundColor: "rbg(200,200,200)" }}>
                             <CardContent>
-                                <Typography> Wynik spotkania </Typography>
-                                <Typography> {`${props.homeResult} : ${props.awayResult}`} </Typography>
+                                <Typography> Twój zakład </Typography>
+                                <Typography> {`${props.history.betObject.homeGoals} : ${props.history.betObject.awayGoals}`} </Typography>
                             </CardContent>
                         </Card>
                     </Grid>

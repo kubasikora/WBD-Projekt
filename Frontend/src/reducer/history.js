@@ -21,6 +21,7 @@ const tournaments = (state = initialState, action) => {
             return {
                 ...state,
                 fetching: false,
+                data: action.payload.data
             }
 
         case FETCH_HISTORY_ERROR:

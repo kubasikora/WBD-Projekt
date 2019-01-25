@@ -13,7 +13,7 @@ const SignupableTournament = (props) => {
             <Grid item xs={12} style={{margin: "1px 20px"}} >
                 <ExpansionPanel style={{backgroundColor: "rgb(230,230,230)"}}>
                     <ExpansionPanelSummary style={{ backgroundColor: "rgb(6,17,90)"}}>
-                        <Typography style={{color: "white"}}>{props.tournamentInfo.tournamentName}</Typography>
+                        <Typography variant="h6" style={{color: "white"}}>{props.tournamentInfo.tournamentName}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails style={{ backgroundColor: "rgb(64, 74, 135)" }}>
                         <Grid container>

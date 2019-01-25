@@ -5,8 +5,8 @@ import signUpForTournament from "../../actions/signUpForTournament";
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    fetching: false,
-    data: []
+    fetching: state.incomingMatches.fetching,
+    data: state.incomingMatches.data
   };
 };
 

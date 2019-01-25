@@ -5,6 +5,10 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 
 const FinishedMatchEntry = props => {
+    const pad = d => {
+        return (d < 10) ? '0' + d.toString() : d.toString();
+    }
+
     return (
         <ExpansionPanel style={{ backgroundColor: "rgb(6,17,90)", margin: "1px"}}>
             <ExpansionPanelSummary style={{ backgroundColor: "rgb(6,17,90)"}}>
@@ -28,7 +32,7 @@ const FinishedMatchEntry = props => {
                 <Grid item xs={12}><div style={{height: "17px"}} /></Grid>
                     <Grid item xs={12}>
                         <Typography style={{ color: "white"}} align="left" >
-                            {`Data spotkania: ${props.matchInfo.day}.${props.matchInfo.month}.${props.matchInfo.year}`}
+                            {`Data spotkania: ${pad(props.matchInfo.day)}.${pad(props.matchInfo.month)}.${props.matchInfo.year}`}
                         </Typography>
                     </Grid>
                     <Grid item xs={12}>

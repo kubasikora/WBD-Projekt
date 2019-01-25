@@ -1,6 +1,8 @@
 import {connect} from "react-redux";
 import BettingPageView from "./BettingPageView";
 import fetchBettableMatches from "../../actions/fetchBettableMatches";
+import postBet from "../../actions/postBet";
+import deleteBet from "../../actions/deleteBet";
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -11,7 +13,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    fetchBettableMatches: (userId) => dispatch(fetchBettableMatches(userId))
+    fetchBettableMatches: (userId) => dispatch(fetchBettableMatches(userId)),
+    postBet: (matchId, home, away) => dispatch(postBet(matchId, home, away)),
+    deleteBet: betId => dispatch(deleteBet(betId))
   };
 };
 

@@ -20,7 +20,7 @@ def show_incoming_matches():
     con = cx_Oracle.connect(usr_pass, usr_pass, cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
     cur = con.cursor()
     cur.execute(
-        'select "MeczId", extract(year from m."DataRozpoczecia"), extract(month from m."DataRozpoczecia"), extract(day from m."DataRozpoczecia"), dh."Nazwa", da."Nazwa", st."Nazwa", ref."Imie", ref."Nazwisko", t."Nazwa", w."WynikGospodarzy", w."WynikGosci"  from "Mecze" m join "Druzyny" dh on dh."DruzynaId"=m."DruzynaGospodarzyId" join "Druzyny" da on da."DruzynaId"= m."DruzynaGosciId" join "Stadiony" st on st."StadionId" = m."StadionId" join "Sedziowie" ref on ref."SedziaId" = m."SedziaId" join "Turnieje" t on t."TurniejId" = m."TurniejId" join "Wyniki" w on w."WynikId" = m."WynikId" where m."WynikId" IS NULL')
+        'select "MeczId", extract(year from m."DataRozpoczecia"), extract(month from m."DataRozpoczecia"), extract(day from m."DataRozpoczecia"), dh."Nazwa", da."Nazwa", st."Nazwa", ref."Imie", ref."Nazwisko", t."Nazwa" from "Mecze" m join "Druzyny" dh on dh."DruzynaId"=m."DruzynaGospodarzyId" join "Druzyny" da on da."DruzynaId"= m."DruzynaGosciId" join "Stadiony" st on st."StadionId" = m."StadionId" join "Sedziowie" ref on ref."SedziaId" = m."SedziaId" join "Turnieje" t on t."TurniejId" = m."TurniejId" where m."WynikId" IS NULL')
 
     resp = cur.fetchmany(numRows=10)
     return Response(json.dumps(resp), mimetype='application/json')
@@ -122,10 +122,10 @@ def show_available_bets():
 def add_or_update_bets():
     try:
         resp = 'ok'
-        user = 1 #request.args.get("UzytkownikId")
-        score_h = 3 #request.args.get("WynikGosp")
-        score_a = 3 #request.args.get("WynikGosc")
-        match = 1 #request.args.get("MeczId")
+        user = request.args.get("UzytkownikId")
+        score_h = request.args.get("WynikGosp")
+        score_a = request.args.get("WynikGosc")
+        match = request.args.get("MeczId")
 
         con = cx_Oracle.connect(usr_pass, usr_pass, cx_Oracle.makedsn("194.29.160.131", 1521, "ora3inf"))
         cur = con.cursor()
